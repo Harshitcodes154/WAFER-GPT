@@ -2,7 +2,7 @@
 // WAFER GPT FRONTEND
 // ============================================================
 
-const API_URL = "http://127.0.0.1:8001";
+const API_URL = "http://127.0.0.1:8002";
 
 let selectedFile = null;
 
@@ -73,6 +73,23 @@ const llmAnalysis =
 
 const newAnalysisBtn =
     document.getElementById("newAnalysisBtn");
+
+const chatForm =
+    document.getElementById("chatForm");
+
+const chatInput =
+    document.getElementById("chatInput");
+
+const chatSendBtn =
+    document.getElementById("chatSendBtn");
+
+const chatMessages =
+    document.getElementById("chatMessages");
+
+const chatStatus =
+    document.getElementById("chatStatus");
+
+let currentAnalysis = null;
 
 
 // ============================================================
@@ -805,6 +822,14 @@ function displayResults(data) {
     }
 
 
+        currentAnalysis = data;
+
+        chatInput.disabled = false;
+        chatSendBtn.disabled = false;
+        chatStatus.textContent =
+            "Assistant is ready with the current wafer context.";
+
+
     // ========================================================
     // SHOW RESULTS
     // ========================================================
@@ -1016,11 +1041,116 @@ if (newAnalysisBtn) {
 
             resetUpload();
 
+            currentAnalysis = null;
+            chatInput.value = "";
+            chatInput.disabled = true;
+            chatSendBtn.disabled = true;
+            chatStatus.textContent =
+                "Analyze a wafer to enable the assistant.";
+            chatMessages.innerHTML = `
+                <div class="chat-message assistant-message">
+                    Upload and analyze a wafer, then ask me about the prediction, confidence, defect pattern, or next inspection steps.
+                </div>
+            `;
+
 
             window.scrollTo({
                 top: 0,
                 behavior: "smooth"
             });
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// CUSTOMER ASSISTANT
+// ============================================================
+
+function addChatMessage(message, role) {
+
+    const messageElement =
+        document.createElement("div");
+
+    messageElement.className =
+        "chat-message " + role + "-message";
+
+    messageElement.textContent = message;
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+}
+
+
+if (chatForm) {
+
+    chatForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+            const message = chatInput.value.trim();
+
+            if (!message || !currentAnalysis) {
+                return;
+            }
+
+            addChatMessage(message, "user");
+            chatInput.value = "";
+            chatInput.disabled = true;
+            chatSendBtn.disabled = true;
+            chatStatus.textContent = "Assistant is thinking...";
+
+            try {
+
+                const response = await fetch(
+                    API_URL + "/chat",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            prediction: currentAnalysis.prediction,
+                            confidence: currentAnalysis.confidence,
+                            probabilities: currentAnalysis.probabilities,
+                            llm_analysis: currentAnalysis.llm_analysis
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(
+                        data.error || "The assistant could not respond."
+                    );
+                }
+
+                addChatMessage(data.response, "assistant");
+                chatStatus.textContent =
+                    "Assistant is ready with the current wafer context.";
+
+            } catch (error) {
+
+                addChatMessage(
+                    "I could not answer right now. " + error.message,
+                    "assistant"
+                );
+                chatStatus.textContent =
+                    "Assistant unavailable. Check that Gemini is configured.";
+
+            } finally {
+
+                chatInput.disabled = false;
+                chatSendBtn.disabled = false;
+                chatInput.focus();
+
+            }
 
         }
     );

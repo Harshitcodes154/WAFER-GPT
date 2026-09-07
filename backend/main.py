@@ -11,7 +11,6 @@ import tensorflow as tf
 import numpy as np
 import cv2
 import uuid
-import os
 
 from llm import analyze_wafer, client as gemini_client
 
@@ -52,14 +51,9 @@ UPLOAD_DIR = BASE_DIR / "uploads"
 
 RESULT_DIR = BASE_DIR / "results"
 
+UPLOAD_DIR.mkdir(exist_ok=True)
 
-UPLOAD_DIR.mkdir(
-    exist_ok=True
-)
-
-RESULT_DIR.mkdir(
-    exist_ok=True
-)
+RESULT_DIR.mkdir(exist_ok=True)
 
 
 # ============================================================
@@ -93,7 +87,6 @@ print(
     "Loading model from:",
     MODEL_PATH
 )
-
 
 try:
 
@@ -164,8 +157,6 @@ def generate_gradcam(
 
     try:
 
-        # Find convolutional layer
-
         target_layer = None
 
         for layer in reversed(
@@ -205,17 +196,30 @@ def generate_gradcam(
 
         with tf.GradientTape() as tape:
 
-            conv_outputs, predictions = \
-                grad_model(image, training=False)
+            conv_outputs, predictions = grad_model(
+                image,
+                training=False
+            )
 
-            if isinstance(conv_outputs, (list, tuple)):
+            if isinstance(
+                conv_outputs,
+                (list, tuple)
+            ):
+
                 conv_outputs = conv_outputs[0]
 
-            if isinstance(predictions, (list, tuple)):
+
+            if isinstance(
+                predictions,
+                (list, tuple)
+            ):
+
                 predictions = predictions[0]
 
+
             class_output = predictions[
-                :, predicted_index
+                :,
+                predicted_index
             ]
 
 
@@ -223,6 +227,15 @@ def generate_gradcam(
             class_output,
             conv_outputs
         )
+
+
+        if grads is None:
+
+            print(
+                "Could not calculate gradients."
+            )
+
+            return False
 
 
         pooled_grads = tf.reduce_mean(
@@ -235,8 +248,7 @@ def generate_gradcam(
 
 
         heatmap = tf.reduce_sum(
-            conv_outputs *
-            pooled_grads,
+            conv_outputs * pooled_grads,
             axis=-1
         )
 
@@ -262,12 +274,20 @@ def generate_gradcam(
         heatmap = heatmap.numpy()
 
 
-        # Original image
+        # ----------------------------------------------------
+        # ORIGINAL IMAGE
+        # ----------------------------------------------------
 
         original = image[0]
 
-        if hasattr(original, "numpy"):
+
+        if hasattr(
+            original,
+            "numpy"
+        ):
+
             original = original.numpy()
+
 
         original = (
             original * 255
@@ -282,7 +302,9 @@ def generate_gradcam(
         )
 
 
-        # Heatmap
+        # ----------------------------------------------------
+        # HEATMAP
+        # ----------------------------------------------------
 
         heatmap = cv2.resize(
             heatmap,
@@ -306,6 +328,10 @@ def generate_gradcam(
         )
 
 
+        # ----------------------------------------------------
+        # OVERLAY
+        # ----------------------------------------------------
+
         overlay = cv2.addWeighted(
             original,
             0.6,
@@ -314,6 +340,10 @@ def generate_gradcam(
             0
         )
 
+
+        # ----------------------------------------------------
+        # SAVE
+        # ----------------------------------------------------
 
         cv2.imwrite(
             str(output_path),
@@ -463,8 +493,8 @@ async def predict(
     if extension not in allowed_extensions:
 
         return {
-            "error":
-                "Unsupported image format."
+            "success": False,
+            "error": "Unsupported image format."
         }
 
 
@@ -528,8 +558,8 @@ async def predict(
 
 
         return {
-            "error":
-                "Invalid image file."
+            "success": False,
+            "error": "Invalid image file."
         }
 
 
@@ -564,10 +594,9 @@ async def predict(
     )
 
 
-    predicted_class = \
-        CLASS_NAMES[
-            predicted_index
-        ]
+    predicted_class = CLASS_NAMES[
+        predicted_index
+    ]
 
 
     confidence = float(
@@ -616,12 +645,11 @@ async def predict(
     )
 
 
-    gradcam_success = \
-        generate_gradcam(
-            processed_image,
-            predicted_index,
-            gradcam_path
-        )
+    gradcam_success = generate_gradcam(
+        processed_image,
+        predicted_index,
+        gradcam_path
+    )
 
 
     gradcam_url = None
@@ -635,7 +663,7 @@ async def predict(
 
 
     # ========================================================
-    # GEMINI
+    # GEMINI ANALYSIS
     # ========================================================
 
     llm_analysis = ""
@@ -722,3 +750,242 @@ async def predict(
 
 
     return response
+
+
+# ============================================================
+# WAFER GPT CHAT
+# ============================================================
+
+@app.post("/chat")
+async def chat(
+    request: dict
+):
+
+    print("")
+    print("==========================================")
+    print("WAFER GPT CHAT REQUEST")
+    print("==========================================")
+
+
+    try:
+
+        # ----------------------------------------------------
+        # GET USER MESSAGE
+        # ----------------------------------------------------
+
+        user_message = request.get(
+            "message",
+            ""
+        )
+
+
+        if not isinstance(
+            user_message,
+            str
+        ):
+
+            user_message = str(
+                user_message
+            )
+
+
+        user_message = user_message.strip()
+
+
+        if not user_message:
+
+            return {
+                "success": False,
+                "error": "Message is required."
+            }
+
+
+        # ----------------------------------------------------
+        # CURRENT WAFER CONTEXT
+        # ----------------------------------------------------
+
+        prediction = request.get(
+            "prediction",
+            "Unknown"
+        )
+
+
+        confidence = request.get(
+            "confidence",
+            0
+        )
+
+
+        probabilities = request.get(
+            "probabilities",
+            {}
+        )
+
+
+        llm_analysis = request.get(
+            "llm_analysis",
+            ""
+        )
+
+
+        # ----------------------------------------------------
+        # SAFE CONFIDENCE
+        # ----------------------------------------------------
+
+        try:
+
+            confidence = float(
+                confidence
+            )
+
+        except Exception:
+
+            confidence = 0.0
+
+
+        # ----------------------------------------------------
+        # CHECK GEMINI
+        # ----------------------------------------------------
+
+        if gemini_client is None:
+
+            return {
+                "success": False,
+                "error": "Gemini client is not available."
+            }
+
+
+        # ----------------------------------------------------
+        # CHAT PROMPT
+        # ----------------------------------------------------
+
+        prompt = f"""
+You are WAFER GPT, an AI semiconductor wafer
+defect analysis assistant.
+
+Your job is to help engineers understand wafer
+defect classification results.
+
+CURRENT WAFER
+=============
+
+Prediction:
+{prediction}
+
+Confidence:
+{confidence:.2f}%
+
+Class Probabilities:
+{probabilities}
+
+Previous AI Analysis:
+{llm_analysis}
+
+USER QUESTION
+=============
+
+{user_message}
+
+RESPONSE RULES
+==============
+
+1. Answer the user's exact question.
+
+2. When the question is about the current wafer,
+   use the wafer context provided above.
+
+3. Explain semiconductor defect concepts clearly
+   and professionally.
+
+4. Do not claim that an AI prediction is a confirmed
+   engineering diagnosis.
+
+5. Possible root causes must be described as hypotheses
+   that require engineering verification.
+
+6. Do not invent process measurements, equipment data,
+   wafer history, or manufacturing conditions.
+
+7. If confidence is discussed, explain that confidence
+   represents the model's predicted probability and
+   should not automatically be treated as certainty.
+
+8. Use concise paragraphs and bullet points where useful.
+
+9. If the user asks an unrelated general question,
+   answer normally.
+
+10. Act like a semiconductor AI assistant rather than
+    a generic chatbot.
+
+USER:
+{user_message}
+"""
+
+
+        print(
+            "Sending chat request to Gemini..."
+        )
+
+
+        # ----------------------------------------------------
+        # GEMINI CHAT REQUEST
+        # ----------------------------------------------------
+
+        response = await asyncio.to_thread(
+            gemini_client.models.generate_content,
+            model="gemini-3.7-flash",
+            contents=prompt
+        )
+
+
+        # ----------------------------------------------------
+        # EXTRACT RESPONSE
+        # ----------------------------------------------------
+
+        answer = getattr(
+            response,
+            "text",
+            None
+        )
+
+
+        if not answer:
+
+            answer = (
+                "I could not generate a response "
+                "for this question."
+            )
+
+
+        print(
+            "Chat response generated successfully."
+        )
+
+
+        return {
+
+            "success": True,
+
+            "response":
+                answer
+
+        }
+
+
+    except Exception as e:
+
+        print(
+            "CHAT ERROR:",
+            e
+        )
+
+
+        return {
+
+            "success": False,
+
+            "error":
+                str(e)
+
+        }
