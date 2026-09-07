@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        WAFER GPT | AI Wafer Intelligence
+    </title>
+
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                W
+            </div>
+
+            <div class="logo-text">
+
+                <h2>
+                    WAFER GPT
+                </h2>
+
+                <span>
+                    AI SEMICONDUCTOR INTELLIGENCE
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+            <button
+                type="button"
+                class="nav-item active"
+            >
+                <span>◉</span>
+                Dashboard
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+            >
+                <span>◌</span>
+                Analysis
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+            >
+                <span>▣</span>
+                History
+            </button>
+
+        </nav>
+
+
+        <div class="system-status">
+
+            <div class="status-dot"></div>
+
+            <div class="status-content">
+
+                <strong>
+                    System Online
+                </strong>
+
+                <small>
+                    AI Engine Ready
+                </small>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="header-content">
+
+                <p class="eyebrow">
+                    SEMICONDUCTOR AI
+                </p>
+
+                <h1>
+                    Wafer Defect Intelligence
+                </h1>
+
+                <p class="subtitle">
+
+                    Upload a wafer map and let AI identify
+                    defect patterns, visualize affected regions
+                    and generate engineering insights.
+
+                </p>
+
+            </div>
+
+
+            <div class="model-status">
+
+                <span class="pulse"></span>
+
+                CNN + GEMINI
+
+            </div>
+
+        </header>
+
+
+
+        <!-- UPLOAD -->
+
+        <section class="upload-section">
+
+
+            <div class="section-title">
+
+                <div class="section-heading">
+
+                    <span class="step">
+                        01
+                    </span>
+
+                    <h2>
+                        Upload Wafer Image
+                    </h2>
+
+                </div>
+
+
+                <span class="supported">
+                    PNG · JPG · JPEG · WEBP
+                </span>
+
+            </div>
+
+
+
+            <!-- FILE INPUT -->
+
+            <input
+                type="file"
+                id="fileInput"
+                accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"
+                style="display:none;"
+            >
+
+
+            <!-- UPLOAD BOX -->
+
+            <div
+                id="uploadBox"
+                class="upload-box"
+            >
+
+
+                <!-- PLACEHOLDER -->
+
+                <div
+                    id="uploadPlaceholder"
+                    class="upload-placeholder"
+                >
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+
+                    <h3>
+                        Drop wafer image here
+                    </h3>
+
+
+                    <p>
+
+                        or
+
+                        <span
+                            id="browseText"
+                        >
+                            browse from your computer
+                        </span>
+
+                    </p>
+
+
+                    <small>
+                        AI analysis supports standard wafer map images
+                    </small>
+
+                </div>
+
+
+
+                <!-- PREVIEW -->
+
+                <div
+                    id="previewContainer"
+                    class="preview-container"
+                    style="display:none;"
+                >
+
+                    <img
+                        id="previewImage"
+                        class="preview-image"
+                        alt="Selected wafer"
+                    >
+
+
+                    <div class="preview-overlay">
+
+                        <div class="preview-info">
+
+                            <strong
+                                id="fileName"
+                            >
+                                wafer-image
+                            </strong>
+
+
+                            <span
+                                id="fileSize"
+                            >
+                                0 KB
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="removeBtn"
+                            class="remove-btn"
+                        >
+                            Remove
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ANALYZE BUTTON -->
+
+            <button
+                type="button"
+                id="analyzeBtn"
+                class="analyze-btn"
+                disabled
+            >
+
+                <span>
+                    Analyze Wafer
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- LOADING -->
+
+        <section
+            id="loadingSection"
+            class="loading-section"
+            style="display:none;"
+        >
+
+            <div class="loader"></div>
+
+
+            <h3>
+                Analyzing wafer...
+            </h3>
+
+
+            <p>
+                CNN prediction → Grad-CAM → Gemini engineering analysis
+            </p>
+
+        </section>
+
+
+
+        <!-- RESULTS -->
+
+        <section
+            id="resultsSection"
+            class="results-section"
+            style="display:none;"
+        >
+
+
+            <div class="section-title">
+
+                <div class="section-heading">
+
+                    <span class="step">
+                        02
+                    </span>
+
+                    <h2>
+                        AI Analysis Result
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="newAnalysisBtn"
+                    class="new-analysis"
+                >
+                    + New Analysis
+                </button>
+
+            </div>
+
+
+
+            <!-- RESULT GRID -->
+
+            <div class="result-grid">
+
+
+                <!-- PREDICTION -->
+
+                <div class="prediction-card">
+
+                    <div class="card-label">
+                        AI PREDICTION
+                    </div>
+
+
+                    <h2 id="prediction">
+                        —
+                    </h2>
+
+
+                    <p>
+                        Detected wafer pattern
+                    </p>
+
+                </div>
+
+
+
+                <!-- CONFIDENCE -->
+
+                <div class="confidence-card">
+
+                    <div class="card-label">
+                        CONFIDENCE
+                    </div>
+
+
+                    <div class="confidence-value">
+
+                        <span id="confidence">
+                            0%
+                        </span>
+
+                    </div>
+
+
+                    <div class="confidence-bar">
+
+                        <div
+                            id="confidenceBar"
+                            class="confidence-fill"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SEVERITY -->
+
+                <div class="severity-card">
+
+                    <div class="card-label">
+                        SEVERITY
+                    </div>
+
+
+                    <h2 id="severity">
+                        —
+                    </h2>
+
+
+                    <p>
+                        AI-based assessment
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- VISUAL GRID -->
+
+            <div class="visual-grid">
+
+
+                <!-- ORIGINAL -->
+
+                <div class="visual-card">
+
+                    <div class="visual-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                INPUT
+                            </span>
+
+                            <h3>
+                                Original Wafer
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="image-container">
+
+                        <img
+                            id="originalImage"
+                            alt="Original wafer"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- GRADCAM -->
+
+                <div class="visual-card">
+
+                    <div class="visual-header">
+
+                        <div>
+
+                            <span class="card-label">
+                                EXPLAINABILITY
+                            </span>
+
+                            <h3>
+                                Grad-CAM Heatmap
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="image-container">
+
+                        <img
+                            id="gradcamImage"
+                            alt="Grad-CAM"
+                        >
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PROBABILITIES -->
+
+            <div class="probability-card">
+
+                <div class="visual-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            CLASSIFICATION
+                        </span>
+
+                        <h3>
+                            Class Probabilities
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="probabilities"
+                    class="probabilities"
+                ></div>
+
+            </div>
+
+
+
+            <!-- GEMINI -->
+
+            <div class="gemini-card">
+
+                <div class="gemini-header">
+
+                    <div class="gemini-icon">
+                        ✦
+                    </div>
+
+
+                    <div>
+
+                        <span class="card-label">
+                            GEMINI AI
+                        </span>
+
+
+                        <h3>
+                            Engineering Analysis
+                        </h3>
+
+                    </div>
+
+
+                    <span class="ai-badge">
+                        AI GENERATED
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="llmAnalysis"
+                    class="llm-analysis"
+                >
+
+                    Waiting for analysis...
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<script src="./script.js"></script>
+
+</body>
+
+</html>
