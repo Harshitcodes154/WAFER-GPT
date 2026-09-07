@@ -2,7 +2,7 @@
 // WAFER GPT FRONTEND
 // ============================================================
 
-const API_URL = "http://127.0.0.1:8002";
+const API_URL = "https://wafer-gpt-production.up.railway.app";;
 
 let selectedFile = null;
 
