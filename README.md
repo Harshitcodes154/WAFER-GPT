@@ -8,29 +8,33 @@
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=18&pause=1000&color=22D3EE&center=true&vCenter=true&width=850&lines=DETECT+%7C+CLASSIFY+%7C+EXPLAIN+%7C+UNDERSTAND;AI+POWERED+WAFER+DEFECT+INTELLIGENCE;COMPUTER+VISION+%2B+EXPLAINABLE+AI+%2B+GENERATIVE+AI;TURNING+WAFER+IMAGES+INTO+ACTIONABLE+INSIGHTS"/>
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=18&pause=1000&color=22D3EE&center=true&vCenter=true&width=900&lines=DETECT+%7C+CLASSIFY+%7C+EXPLAIN+%7C+UNDERSTAND;AI+POWERED+WAFER+DEFECT+INTELLIGENCE;COMPUTER+VISION+%2B+EXPLAINABLE+AI+%2B+GENERATIVE+AI;TURNING+WAFER+IMAGES+INTO+ACTIONABLE+INSIGHTS" alt="Typing SVG"/>
 
 <br/><br/>
 
 <a href="https://github.com/Harshitcodes154/WAFER-GPT">
-<img src="https://img.shields.io/badge/GitHub-WAFER--GPT-181717?style=for-the-badge&logo=github"/>
+<img src="https://img.shields.io/badge/GitHub-WAFER--GPT-181717?style=for-the-badge&logo=github" alt="GitHub"/>
 </a>
 
-<img src="https://img.shields.io/badge/TensorFlow-Deep%20Learning-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white"/>
+<img src="https://img.shields.io/badge/TensorFlow-Deep%20Learning-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="TensorFlow"/>
 
-<img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white"/>
+<img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/>
 
-<img src="https://img.shields.io/badge/Google%20Gemini-Generative%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white"/>
+<img src="https://img.shields.io/badge/Google%20Gemini-Generative%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini"/>
 
-<img src="https://img.shields.io/badge/Grad--CAM-Explainable%20AI-7C3AED?style=for-the-badge"/>
+<img src="https://img.shields.io/badge/Grad--CAM-Explainable%20AI-7C3AED?style=for-the-badge" alt="Grad-CAM"/>
 
-<img src="https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white"/>
+<img src="https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white" alt="OpenCV"/>
 
 <br/><br/>
 
 ### 🚀 Detect. Explain. Understand.
 
-**WAFER GPT is an AI-powered semiconductor wafer defect intelligence platform that combines Deep Learning, Computer Vision, Grad-CAM Explainable AI and Google Gemini to analyze wafer patterns and generate human-readable insights.**
+**WAFER GPT** is an AI-powered semiconductor wafer defect intelligence platform that combines:
+
+**Deep Learning + Computer Vision + Explainable AI + Generative AI**
+
+to classify wafer patterns, visualize model attention using Grad-CAM, generate AI-assisted analysis, and provide contextual interaction through an AI chatbot.
 
 </div>
 
@@ -40,100 +44,161 @@
 
 **WAFER GPT** is an end-to-end AI system designed for intelligent semiconductor wafer defect analysis.
 
-Instead of providing only a machine-learning classification, WAFER GPT creates a complete analysis pipeline:
+Traditional classification systems generally provide only a predicted class.
+
+WAFER GPT goes further by combining:
+
+- 🧠 Deep Learning Classification
+- 📊 Confidence & Probability Distribution
+- 🔬 Grad-CAM Explainability
+- 🤖 Google Gemini AI Analysis
+- 💬 Context-Aware AI Chat
+- ⚡ FastAPI REST Backend
+- 🌐 Interactive Web Interface
+- ☁️ Cloud Deployment
+
+The objective is simple:
+
+> **Don't just predict the defect. Explain the prediction.**
+
+---
+
+# 🎯 The Problem
+
+Semiconductor wafer inspection can generate complex visual patterns that are difficult to analyze manually at scale.
+
+A conventional classifier might return:
 
 ```text
-                ┌──────────────────────┐
-                │     WAFER IMAGE      │
-                └──────────┬───────────┘
-                           │
-                           ▼
-                ┌──────────────────────┐
-                │ IMAGE PREPROCESSING  │
-                │   PIL + NumPy + CV   │
-                └──────────┬───────────┘
-                           │
-                           ▼
-                ┌──────────────────────┐
-                │   TENSORFLOW / CNN   │
-                │   DEFECT CLASSIFIER  │
-                └──────────┬───────────┘
-                           │
-             ┌─────────────┼─────────────┐
-             ▼             ▼             ▼
-        PREDICTION     CONFIDENCE   PROBABILITIES
-             │
-             ▼
-        ┌───────────────┐
-        │   GRAD-CAM    │
-        │ EXPLANABILITY │
-        └───────┬───────┘
-                │
-                ▼
-        ┌───────────────┐
-        │   GEMINI AI   │
-        │  EXPLANATION  │
-        └───────┬───────┘
-                │
-                ▼
-        ┌───────────────┐
-        │ WAFER GPT CHAT│
-        │   ASSISTANT   │
-        └───────────────┘
-🎯 Why WAFER GPT?
-
-A traditional image classifier may return:
-
 Prediction: Scratch
-
 Confidence: 91.42%
+```
 
-But that alone doesn't answer important questions:
+But an engineer may still want to know:
 
-Why was this defect predicted?
+```text
+Why was this prediction made?
+
 Which region influenced the model?
-What were the alternative predictions?
+
+What were the alternative classes?
+
 How confident is the model?
-What does the detected pattern mean?
-What should an engineer investigate?
-Can the result be explained in natural language?
 
-WAFER GPT attempts to bridge this gap.
+What does this wafer pattern represent?
 
-💡 Core Idea
+What could potentially cause such a pattern?
 
-WAFER GPT follows a simple philosophy:
+How should the result be interpreted?
+```
 
-Don't just predict the defect. Explain the prediction.
+WAFER GPT addresses these questions by combining classification, explainability and generative AI into a single workflow.
 
-The platform combines three major intelligence layers:
+---
 
-┌──────────────────────────────────────────────┐
-│              WAFER GPT INTELLIGENCE          │
-├──────────────────────────────────────────────┤
-│                                              │
-│  01  CNN                                     │
-│      What is the defect?                     │
-│                                              │
-│  02  Grad-CAM                                │
-│      Where did the model look?               │
-│                                              │
-│  03  Gemini                                  │
-│      How can the result be understood?      │
-│                                              │
-└──────────────────────────────────────────────┘
-🌌 System Architecture
+# 💡 Core Intelligence
+
+WAFER GPT contains three major intelligence layers:
+
+```text
+┌─────────────────────────────────────────────────────┐
+│                 WAFER GPT INTELLIGENCE              │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  01  CNN                                            │
+│      WHAT is the predicted wafer pattern?           │
+│                                                     │
+│  02  Grad-CAM                                       │
+│      WHERE did the model focus?                    │
+│                                                     │
+│  03  Gemini                                         │
+│      HOW can the result be understood?             │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+This creates an end-to-end explainable AI workflow:
+
+```text
+IMAGE
+  ↓
+CNN CLASSIFICATION
+  ↓
+PREDICTION
+  ↓
+CONFIDENCE
+  ↓
+PROBABILITY DISTRIBUTION
+  ↓
+GRAD-CAM
+  ↓
+VISUAL EXPLANATION
+  ↓
+GEMINI ANALYSIS
+  ↓
+CONTEXTUAL AI CHAT
+```
+
+---
+
+# 🌌 System Architecture
+
 <img src="./assets/architecture.svg" width="100%" alt="WAFER GPT Architecture"/>
-🔄 Complete AI Pipeline
+
+### High-Level Architecture
+
+```text
+                         USER
+                          │
+                          ▼
+                 ┌─────────────────┐
+                 │  WEB FRONTEND   │
+                 │ HTML/CSS/JS     │
+                 └────────┬────────┘
+                          │
+                          │ HTTPS
+                          ▼
+                 ┌─────────────────┐
+                 │    FASTAPI      │
+                 │    BACKEND      │
+                 └────────┬────────┘
+                          │
+            ┌─────────────┼─────────────┐
+            │             │             │
+            ▼             ▼             ▼
+       TensorFlow      Grad-CAM       Gemini
+          CNN         Explainability    AI
+            │             │             │
+            └─────────────┼─────────────┘
+                          │
+                          ▼
+                 ┌─────────────────┐
+                 │ ANALYSIS RESULT │
+                 └────────┬────────┘
+                          │
+                          ▼
+                 ┌─────────────────┐
+                 │   RESULTS UI    │
+                 └────────┬────────┘
+                          │
+                          ▼
+                 ┌─────────────────┐
+                 │  WAFER GPT CHAT │
+                 └─────────────────┘
+```
+
+---
+
+# 🔄 Complete AI Pipeline
+
 <img src="./assets/pipeline.svg" width="100%" alt="WAFER GPT AI Pipeline"/>
 
-The complete workflow is:
-
+```text
 Upload Wafer Image
         ↓
-Validate Image
+File Validation
         ↓
-Save Image
+Image Storage
         ↓
 RGB Conversion
         ↓
@@ -141,95 +206,112 @@ RGB Conversion
         ↓
 Pixel Normalization
         ↓
-TensorFlow CNN
+TensorFlow / Keras Model
         ↓
 9-Class Classification
         ↓
 Prediction + Confidence
         ↓
-Probability Distribution
+Complete Probability Distribution
         ↓
 Grad-CAM Generation
         ↓
 Gemini AI Analysis
         ↓
-Contextual WAFER GPT Chat
-🧬 Defect Classification
+Results Dashboard
+        ↓
+Context-Aware WAFER GPT Chat
+```
 
-WAFER GPT currently supports 9 wafer-pattern classes:
+---
 
-#	Class
-01	Center
-02	Donut
-03	Edge-Loc
-04	Edge-Ring
-05	Loc
-06	Near-full
-07	Random
-08	Scratch
-09	none
+# 🧬 Wafer Defect Classification
+
+WAFER GPT currently supports **9 wafer-pattern classes**.
+
+| # | Class |
+|---|---|
+| 01 | Center |
+| 02 | Donut |
+| 03 | Edge-Loc |
+| 04 | Edge-Ring |
+| 05 | Loc |
+| 06 | Near-full |
+| 07 | Random |
+| 08 | Scratch |
+| 09 | none |
 
 The model produces a probability for every class.
 
-Example:
+### Example
 
+```text
 Scratch       91.42%
 Random         4.31%
 Edge-Loc       2.17%
 Loc            1.23%
 Center         0.42%
 ...
+```
 
 The class with the highest model probability becomes the predicted class.
 
-🔬 Defect Classes
-🎯 Center
+---
+
+# 🔬 Defect Classes
+
+### 🎯 Center
 
 Pattern primarily concentrated around the center region of the wafer.
 
-🍩 Donut
+### 🍩 Donut
 
-A ring-like defect distribution forming a donut-shaped pattern.
+Ring-like defect distribution forming a donut-shaped pattern.
 
-📍 Edge-Loc
+### 📍 Edge-Loc
 
 Localized defect behavior concentrated around the wafer edge.
 
-⭕ Edge-Ring
+### ⭕ Edge-Ring
 
 Ring-shaped defect distribution near the wafer boundary.
 
-📌 Loc
+### 📌 Loc
 
 Localized defect pattern occurring in a particular wafer region.
 
-🟠 Near-full
+### 🟠 Near-full
 
 Defect pattern covering a very large portion of the wafer.
 
-🎲 Random
+### 🎲 Random
 
 Irregular or randomly distributed defect pattern.
 
-✏️ Scratch
+### ✏️ Scratch
 
-Linear or elongated defect pattern resembling scratches.
+Linear or elongated defect pattern resembling a scratch.
 
-✅ None
+### ✅ none
 
-No significant defect pattern detected according to the model's classification.
+No significant defect pattern detected according to the model classification.
 
-🧠 CNN Inference
+---
 
-The trained TensorFlow/Keras model receives an image tensor of:
+# 🧠 CNN Inference
 
+The trained TensorFlow/Keras model expects an input tensor with:
+
+```text
 224 × 224 × 3
+```
 
 The preprocessing pipeline is:
 
+```text
 Original Image
       ↓
-RGB
+RGB Conversion
       ↓
 Resize
 224 × 224
@@ -241,21 +323,47 @@ float32
 Normalize
 pixel / 255
       ↓
-Batch Dimension
+Add Batch Dimension
       ↓
 (1, 224, 224, 3)
       ↓
-CNN
+TensorFlow / Keras Model
       ↓
 9 Output Probabilities
-📊 Confidence & Probability Analysis
+```
 
-WAFER GPT does not only return the winning class.
+### Preprocessing
 
-It returns the complete probability distribution.
+Conceptually:
 
-Example:
+```python
+image = image.convert("RGB")
+image = image.resize((224, 224))
 
+image = np.array(
+    image,
+    dtype=np.float32
+)
+
+image = image / 255.0
+
+image = np.expand_dims(
+    image,
+    axis=0
+)
+```
+
+---
+
+# 📊 Confidence & Probability Analysis
+
+WAFER GPT does not return only the winning class.
+
+It returns the probability distribution across all supported classes.
+
+### Example
+
+```json
 {
   "Center": 0.004,
   "Donut": 0.003,
@@ -267,21 +375,29 @@ Example:
   "Scratch": 0.9142,
   "none": 0.0007
 }
+```
 
-The frontend converts these values into visual probability bars.
+The frontend can visualize these values using probability bars or charts.
 
-This provides more information than a single class label.
+This gives more information than a single class label.
 
-🔥 Explainable AI — Grad-CAM
+---
+
+# 🔥 Explainable AI — Grad-CAM
+
 <img src="./assets/gradcam.svg" width="100%" alt="Grad-CAM Explainable AI"/>
 
-One of the most important features of WAFER GPT is Grad-CAM.
+One of the core features of WAFER GPT is **Grad-CAM**.
 
-A CNN can make a prediction without directly explaining which visual region influenced that prediction.
+A CNN can produce a prediction without directly showing which visual region contributed most strongly to that prediction.
 
-Grad-CAM provides a visual explanation.
+Grad-CAM provides a visual explanation of model attention.
 
-🧩 Grad-CAM Pipeline
+---
+
+# 🧩 Grad-CAM Pipeline
+
+```text
              INPUT IMAGE
                   │
                   ▼
@@ -309,145 +425,230 @@ Grad-CAM provides a visual explanation.
          HEATMAP RESIZE
                   │
                   ▼
-        ORIGINAL + HEATMAP
+       ORIGINAL + HEATMAP
                   │
                   ▼
-          VISUAL EXPLANATION
-🔬 How Grad-CAM Works
+         VISUAL EXPLANATION
+```
 
-WAFER GPT:
+---
 
-Finds a convolutional layer in the model.
-Creates a gradient model.
-Calculates gradients for the predicted class.
-Pools the gradients.
-Weights convolutional feature maps.
-Generates a heatmap.
-Normalizes the heatmap.
-Resizes it to the original image dimensions.
-Applies a color map.
-Overlays the heatmap on the original wafer image.
+# 🔬 How Grad-CAM Works
 
-The result is an explainability visualization.
+WAFER GPT dynamically searches for a suitable convolutional layer.
 
-👁️ Why Grad-CAM?
+The pipeline then:
 
-Instead of:
+1. Finds a convolutional feature layer.
+2. Creates a gradient model.
+3. Performs forward inference.
+4. Selects the predicted class output.
+5. Calculates gradients using TensorFlow `GradientTape`.
+6. Pools gradients across spatial dimensions.
+7. Uses the gradients as feature importance weights.
+8. Generates the class activation heatmap.
+9. Applies ReLU.
+10. Normalizes the heatmap.
+11. Resizes it to the image dimensions.
+12. Applies an OpenCV color map.
+13. Overlays the heatmap on the wafer image.
+14. Saves the explainability result.
 
-Model → Scratch
+Conceptually:
 
-we get:
-
-Model → Scratch
+```text
+CNN Feature Maps
        +
+Class Gradients
        ↓
-"These visual regions influenced the prediction."
+Feature Importance
+       ↓
+Activation Heatmap
+       ↓
+Resize
+       ↓
+Color Mapping
+       ↓
+Overlay
+       ↓
+Grad-CAM Visualization
+```
 
-This helps make the model less of a black box.
+---
 
-🤖 Gemini AI Analysis
+# 👁️ Why Grad-CAM?
+
+Without explainability:
+
+```text
+IMAGE
+  ↓
+CNN
+  ↓
+Scratch
+```
+
+With WAFER GPT:
+
+```text
+IMAGE
+  ↓
+CNN
+  ↓
+Scratch
+  ↓
+Grad-CAM
+  ↓
+Visual regions influencing the prediction
+```
+
+This helps make the classification pipeline more transparent.
+
+> Grad-CAM is an interpretability aid and should not be treated as a definitive physical defect localization method.
+
+---
+
+# 🤖 Gemini AI Analysis
+
 <img src="./assets/gemini-flow.svg" width="100%" alt="Gemini AI Flow"/>
 
-The CNN performs the visual classification.
+The CNN handles the primary image classification.
 
-Gemini adds a natural-language intelligence layer.
+The Gemini layer adds natural-language intelligence.
 
-The analysis can use:
+The analysis can use information such as:
 
+```text
 Prediction
-     +
+      +
 Confidence
-     +
+      +
 Probability Distribution
-     +
+      +
 Wafer Image
+```
 
-The output is a human-readable explanation.
+This information can be converted into a human-readable analysis.
 
-🧠 AI Analysis Flow
-              CNN
-               │
-       ┌───────┼────────┐
-       │       │        │
-       ▼       ▼        ▼
-  Prediction Confidence Probabilities
-       │       │        │
-       └───────┼────────┘
-               │
-               ▼
-          Gemini AI
-               │
-               ▼
-      Human-readable
-          analysis
-💬 WAFER GPT Chat
+---
+
+# 🧠 AI Analysis Flow
+
+```text
+                 CNN
+                  │
+        ┌─────────┼─────────┐
+        │         │         │
+        ▼         ▼         ▼
+   Prediction  Confidence  Probabilities
+        │         │         │
+        └─────────┼─────────┘
+                  │
+                  ▼
+             Gemini AI
+                  │
+                  ▼
+       Human-Readable Analysis
+```
+
+Gemini can help explain:
+
+- Predicted defect class
+- Confidence interpretation
+- Probability distribution
+- Possible pattern meaning
+- Potential hypotheses
+- Areas that may require engineering verification
+
+---
+
+# 💬 WAFER GPT Chat
+
 <img src="./assets/chatbot-flow.svg" width="100%" alt="WAFER GPT Chat"/>
 
-WAFER GPT also provides a contextual AI assistant.
+WAFER GPT includes a contextual AI assistant.
 
-The chatbot can answer questions about the currently analyzed wafer.
+The chatbot is designed to answer questions about the current wafer analysis.
 
-Example:
+### Example Questions
 
-User:
+```text
 Why did the model classify this as Scratch?
-User:
+
 What does Edge-Ring mean?
-User:
+
 Why is the confidence low?
-User:
+
 Explain the result in simple terms.
-User:
+
 What could potentially cause this pattern?
-🧠 Context-Aware Chat
 
-The chatbot can receive:
+What are the alternative predictions?
+```
 
+---
+
+# 🧠 Context-Aware Chat
+
+The `/chat` endpoint can receive the current wafer context:
+
+```text
 Current Prediction
-       +
+        +
 Confidence
-       +
+        +
 Class Probabilities
-       +
+        +
 Previous AI Analysis
-       +
+        +
 User Question
-       ↓
-     Gemini
-       ↓
+        ↓
+      Gemini
+        ↓
 Contextual Response
+```
 
-This means the chatbot is not simply a generic AI chatbot.
+This allows the chatbot to operate as a wafer-analysis assistant rather than simply acting as a generic chatbot.
 
-It can reason about the current wafer analysis context supplied by the application.
+---
 
-🔌 Backend API
+# 🔌 Backend API
 
-WAFER GPT uses FastAPI as its backend API framework.
+WAFER GPT uses **FastAPI** as its backend framework.
 
-Available endpoints:
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/` | GET | API status |
+| `/health` | GET | Health check |
+| `/predict` | POST | Wafer image analysis |
+| `/chat` | POST | Contextual AI chat |
+| `/uploads/{filename}` | GET | Uploaded image |
+| `/gradcam/{filename}` | GET | Grad-CAM result |
+| `/docs` | GET | Swagger API documentation |
+| `/redoc` | GET | ReDoc API documentation |
 
-Endpoint	Method	Purpose
-/	GET	API status
-/health	GET	Health check
-/predict	POST	Wafer image analysis
-/chat	POST	Contextual AI chat
-/uploads/{filename}	GET	Uploaded image
-/gradcam/{filename}	GET	Grad-CAM result
-/docs	GET	Swagger API documentation
-/redoc	GET	ReDoc API documentation
-📡 /predict
+---
+
+# 📡 `/predict`
 
 Main wafer analysis endpoint.
 
-Request
+### Request
+
+```http
 POST /predict
 Content-Type: multipart/form-data
+```
 
 Upload:
 
+```text
 file = wafer_image.png
-Example Response
+```
+
+### Example Response
+
+```json
 {
   "success": true,
   "filename": "abc123.png",
@@ -468,11 +669,17 @@ Example Response
   "llm_analysis": "AI generated analysis",
   "llm_enabled": true
 }
-💬 /chat
+```
 
-The /chat endpoint allows users to interact with WAFER GPT.
+---
 
-Request
+# 💬 `/chat`
+
+The `/chat` endpoint allows contextual interaction with WAFER GPT.
+
+### Request
+
+```json
 {
   "message": "Why is the confidence high?",
   "prediction": "Scratch",
@@ -480,53 +687,91 @@ Request
   "probabilities": {},
   "llm_analysis": "Previous AI analysis"
 }
-Response
+```
+
+### Response
+
+```json
 {
   "success": true,
   "response": "AI generated contextual response..."
 }
-❤️ Health Monitoring
+```
+
+---
+
+# ❤️ Health Monitoring
 
 WAFER GPT provides:
 
+```http
 GET /health
+```
 
-Example response:
+Example:
 
+```json
 {
   "status": "healthy",
   "model_loaded": true,
   "gemini": true
 }
+```
 
-This allows the frontend or deployment environment to verify whether the backend and model are available.
+This allows the frontend or deployment environment to check whether the backend and required AI services are available.
 
-🏗️ Technology Stack
-Frontend
-HTML5
-CSS3
-JavaScript
-Backend
-Python
-FastAPI
-Uvicorn
-Deep Learning
-TensorFlow
-Keras
-Image Processing
-OpenCV
-Pillow
-NumPy
-Explainable AI
-Grad-CAM
-TensorFlow GradientTape
-CNN Feature Maps
-Generative AI
-Google Gemini
-Deployment
-Vercel
-Railway
-📦 Project Structure
+---
+
+# 🏗️ Technology Stack
+
+## Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+
+## Backend
+
+- Python
+- FastAPI
+- Uvicorn
+
+## Deep Learning
+
+- TensorFlow
+- Keras
+
+## Computer Vision
+
+- OpenCV
+- Pillow
+- NumPy
+
+## Explainable AI
+
+- Grad-CAM
+- TensorFlow GradientTape
+- CNN Feature Maps
+
+## Generative AI
+
+- Google Gemini
+
+## Deployment
+
+- Vercel
+- Railway
+
+## API Documentation
+
+- Swagger UI
+- ReDoc
+
+---
+
+# 📦 Project Structure
+
+```text
 WAFER-GPT/
 │
 ├── assets/
@@ -556,68 +801,129 @@ WAFER-GPT/
 ├── .gitignore
 │
 └── README.md
-⚙️ Local Setup
-1. Clone Repository
+```
+
+---
+
+# ⚙️ Local Setup
+
+## 1. Clone Repository
+
+```bash
 git clone https://github.com/Harshitcodes154/WAFER-GPT.git
 cd WAFER-GPT
-2. Create Virtual Environment
-Windows
+```
+
+---
+
+## 2. Create Virtual Environment
+
+### Windows
+
+```bash
 python -m venv .venv
 .venv\Scripts\activate
-Linux / macOS
+```
+
+### Linux / macOS
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
-3. Install Dependencies
+```
+
+---
+
+## 3. Install Dependencies
+
+```bash
 pip install -r backend/requirements.txt
-4. Configure Gemini
+```
+
+---
+
+# 🔐 4. Configure Gemini
 
 Create:
 
+```text
 backend/.env
+```
 
 Add:
 
+```env
 GEMINI_API_KEY=YOUR_GEMINI_API_KEY
-⚠️ Security
+```
 
-Never commit your API key.
+> Never commit your API key to GitHub.
 
-Add to .gitignore:
+Your `.gitignore` should contain:
 
+```gitignore
 .env
 .env.*
 __pycache__/
 *.pyc
-5. Start Backend
+.venv/
+```
+
+---
+
+# ▶️ 5. Start Backend
+
+```bash
 cd backend
 uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
 
 Backend:
 
+```text
 http://127.0.0.1:8000
+```
 
 Swagger:
 
+```text
 http://127.0.0.1:8000/docs
-6. Start Frontend
+```
+
+ReDoc:
+
+```text
+http://127.0.0.1:8000/redoc
+```
+
+---
+
+# 🌐 6. Start Frontend
 
 Open:
 
+```text
 frontend/index.html
+```
 
-The frontend API configuration should point to the backend.
+For local development, configure:
 
-For local development:
-
+```javascript
 const API_URL = "http://127.0.0.1:8000";
+```
 
 For production:
 
+```javascript
 const API_URL = "YOUR_DEPLOYED_BACKEND_URL";
-🌐 Production Deployment
+```
 
-WAFER GPT can be deployed using a split architecture.
+---
 
+# 🌍 Production Deployment
+
+WAFER GPT uses a split deployment architecture.
+
+```text
                          INTERNET
                             │
                             ▼
@@ -639,34 +945,48 @@ WAFER GPT can be deployed using a split architecture.
              ▼              ▼              ▼
         TensorFlow       Grad-CAM       Gemini
           Model        Explainability      AI
-🚂 Backend — Railway
+```
 
-The FastAPI backend can be deployed to Railway.
+---
 
-Production backend:
+# 🚂 Backend — Railway
+
+The FastAPI backend is deployed on Railway.
+
+### Live Backend
 
 https://wafer-gpt-production.up.railway.app
 
-Example API:
+### Health Check
 
 https://wafer-gpt-production.up.railway.app/health
 
-Swagger:
+### Swagger
 
 https://wafer-gpt-production.up.railway.app/docs
-▲ Frontend — Vercel
 
-The frontend can be deployed through Vercel.
+### ReDoc
 
-The production JavaScript must use the Railway backend URL instead of:
+https://wafer-gpt-production.up.railway.app/redoc
 
-http://127.0.0.1:8000
+---
 
-Example:
+# ▲ Frontend — Vercel
 
+The frontend can be deployed using Vercel.
+
+The frontend's API configuration should point to the Railway backend:
+
+```javascript
 const API_URL =
     "https://wafer-gpt-production.up.railway.app";
-🖥️ Frontend Workflow
+```
+
+---
+
+# 🖥️ Frontend Workflow
+
+```text
 USER
  │
  ▼
@@ -690,35 +1010,47 @@ CNN
  ▼
 RESULT JSON
  │
- ├──────────────┐
- ▼              ▼
-PREDICTION    GRAD-CAM
- │              │
- └──────┬───────┘
-        ▼
-   GEMINI ANALYSIS
-        │
-        ▼
-   RESULTS UI
-        │
-        ▼
-    AI CHAT
-📸 Supported Image Formats
+ ├──────────────────┐
+ ▼                  ▼
+PREDICTION        GRAD-CAM
+ │                  │
+ └────────┬─────────┘
+          ▼
+     GEMINI ANALYSIS
+          │
+          ▼
+      RESULTS UI
+          │
+          ▼
+       AI CHAT
+```
+
+---
+
+# 📸 Supported Image Formats
 
 WAFER GPT supports:
 
-PNG
-JPG
-JPEG
-WEBP
+- PNG
+- JPG
+- JPEG
+- WEBP
 
-Maximum frontend upload size:
+The frontend can enforce an upload size limit such as:
 
+```text
 10 MB
-🧪 Image Validation
+```
 
-The frontend performs:
+The exact frontend limit depends on the implementation deployed with the project.
 
+---
+
+# 🧪 Image Validation
+
+The frontend workflow can perform:
+
+```text
 File Type Validation
         ↓
 File Size Validation
@@ -728,67 +1060,84 @@ FileReader Preview
 Image Preview
         ↓
 Enable Analyze Button
+```
 
 The backend additionally validates the file extension before processing.
 
-🖼️ Image Storage
+---
 
-Uploaded images are stored with generated unique filenames.
+# 🖼️ Image Storage
+
+Uploaded images receive generated unique filenames.
 
 Example:
 
+```text
 uploads/
 └── 8e2f19a1c7d4.png
+```
 
 Grad-CAM outputs are stored separately:
 
+```text
 results/
 └── gradcam_8e2f19a1c7d4.jpg
-🛡️ Error Handling
+```
 
-The backend handles:
+---
 
-Unsupported file formats
-Invalid image files
-Model loading errors
-Grad-CAM failures
-Gemini errors
-Missing AI responses
-Invalid chat requests
+# 🛡️ Error Handling
 
-The API returns structured JSON responses where applicable.
+The backend includes handling for:
 
-⚠️ Important AI Disclaimer
+- Unsupported file formats
+- Invalid image files
+- Model loading errors
+- Grad-CAM failures
+- Gemini API errors
+- Missing AI responses
+- Invalid chat requests
 
-WAFER GPT is an AI-assisted semiconductor analysis system.
+API responses are returned as structured JSON where applicable.
+
+---
+
+# ⚠️ Important AI Disclaimer
+
+WAFER GPT is an **AI-assisted semiconductor analysis system**.
 
 A model prediction should not automatically be considered a confirmed engineering diagnosis.
 
-Model confidence represents the model's predicted probability distribution and should not be interpreted as absolute certainty.
+Model confidence represents the model's output probability and should not be interpreted as absolute certainty.
 
 AI-generated root-cause explanations are hypotheses and should be validated against:
 
-Process data
-Equipment data
-Manufacturing history
-Physical inspection
-Engineering measurements
-Production context
+- Process data
+- Equipment data
+- Manufacturing history
+- Physical inspection
+- Engineering measurements
+- Production context
 
 WAFER GPT is intended as an AI assistance and analysis tool, not a replacement for semiconductor engineering validation.
 
-🧠 Why Explainable AI Matters
+---
 
-Traditional:
+# 🧠 Why Explainable AI Matters
 
+### Traditional AI
+
+```text
 IMAGE
   ↓
 MODEL
   ↓
 CLASS
+```
 
-WAFER GPT:
+### WAFER GPT
 
+```text
 IMAGE
   ↓
 MODEL
@@ -808,68 +1157,117 @@ GEMINI
 HUMAN-READABLE INSIGHT
   ↓
 CONTEXTUAL CHAT
+```
 
-This creates a more transparent AI workflow.
+The goal is to move from:
 
-⚔️ Traditional AI vs WAFER GPT
-Capability	Traditional Classifier	WAFER GPT
-Image Classification	✅	✅
-Confidence	Sometimes	✅
-Class Probabilities	Sometimes	✅
-Explainability	❌	✅
-Grad-CAM	❌	✅
-Natural Language Analysis	❌	✅
-Contextual Chat	❌	✅
-REST API	Depends	✅
-Interactive Web UI	Depends	✅
-🎯 Real-World Potential
+> **Prediction**
 
-WAFER GPT can serve as a foundation for AI-assisted semiconductor workflows such as:
+towards:
 
-Semiconductor Inspection
-        ↓
-Wafer Pattern Analysis
-        ↓
-Defect Classification
-        ↓
-Explainable AI
-        ↓
-Engineering Investigation
+> **Prediction + Explanation + Interaction**
+
+---
+
+# ⚔️ Traditional Classifier vs WAFER GPT
+
+| Capability | Traditional Classifier | WAFER GPT |
+|---|---:|---:|
+| Image Classification | ✅ | ✅ |
+| Confidence | Sometimes | ✅ |
+| Class Probabilities | Sometimes | ✅ |
+| Explainability | Limited | ✅ |
+| Grad-CAM | ❌ | ✅ |
+| Natural Language Analysis | ❌ | ✅ |
+| Contextual Chat | ❌ | ✅ |
+| REST API | Depends | ✅ |
+| Interactive Web UI | Depends | ✅ |
+| Cloud Deployment | Depends | ✅ |
+
+---
+
+# 🎯 Real-World Potential
+
+WAFER GPT can serve as a foundation for AI-assisted semiconductor workflows:
+
+```text
+SEMICONDUCTOR INSPECTION
+          ↓
+WAFER PATTERN ANALYSIS
+          ↓
+DEFECT CLASSIFICATION
+          ↓
+EXPLAINABLE AI
+          ↓
+AI-ASSISTED INTERPRETATION
+          ↓
+ENGINEERING INVESTIGATION
+```
 
 Potential applications include:
 
-Automated wafer inspection
-Semiconductor defect classification
-Visual quality analysis
-Explainable manufacturing AI
-AI-assisted engineering workflows
-Research and experimentation
-Wafer pattern analytics
-Intelligent inspection interfaces
-🚀 Future Roadmap
-🔹 Phase 1 — Current
- Wafer image upload
- Image preprocessing
- CNN classification
- 9-class prediction
- Confidence score
- Probability distribution
- Grad-CAM
- Gemini AI analysis
- Context-aware chat
- FastAPI backend
- Interactive frontend
- Cloud deployment
-🔹 Phase 2 — Planned
- Multi-image batch analysis
- Wafer-to-wafer comparison
- Historical analysis
- Defect trend dashboard
- Automated PDF reports
- Exportable analysis
- Advanced defect localization
- Model monitoring
-🔹 Phase 3 — Advanced
+- Automated wafer inspection
+- Semiconductor defect classification
+- Visual quality analysis
+- Explainable manufacturing AI
+- AI-assisted engineering workflows
+- Research and experimentation
+- Wafer pattern analytics
+- Intelligent inspection interfaces
+
+---
+
+# 🚀 Future Roadmap
+
+## 🔹 Phase 1 — Current
+
+- [x] Wafer image upload
+- [x] Image preprocessing
+- [x] CNN classification
+- [x] 9-class prediction
+- [x] Confidence score
+- [x] Probability distribution
+- [x] Grad-CAM
+- [x] Gemini AI analysis
+- [x] Context-aware chat
+- [x] FastAPI backend
+- [x] Interactive frontend
+- [x] Cloud deployment
+
+---
+
+## 🔹 Phase 2 — Planned
+
+```text
+Multiple Images
+      ↓
+Batch Analysis
+      ↓
+Wafer Comparison
+      ↓
+Historical Analysis
+      ↓
+Defect Trends
+      ↓
+Automated Reports
+```
+
+Potential features:
+
+- Multi-image batch analysis
+- Wafer-to-wafer comparison
+- Historical analysis
+- Defect trend dashboard
+- Automated PDF reports
+- Exportable analysis
+- Advanced defect localization
+- Model monitoring
+
+---
+
+## 🔹 Phase 3 — Advanced
+
+```text
 Multiple Wafers
       ↓
 Defect Database
@@ -883,44 +1281,59 @@ Yield Analytics
 Predictive Intelligence
       ↓
 Engineering Copilot
+```
 
 Potential future capabilities:
 
-Yield prediction
-Process correlation
-Historical defect intelligence
-Equipment-level analytics
-Engineer feedback loops
-Continuous model improvement
-Automated root-cause investigation
-Production-scale monitoring
-🔮 Vision
+- Yield prediction
+- Process correlation
+- Historical defect intelligence
+- Equipment-level analytics
+- Engineer feedback loops
+- Continuous model improvement
+- Automated root-cause investigation
+- Production-scale monitoring
+
+---
+
+# 🔮 Vision
 
 The long-term vision of WAFER GPT is to move beyond:
 
-AI that classifies wafers
+```text
+AI THAT CLASSIFIES WAFERS
+```
 
 towards:
 
-AI that helps engineers understand wafer behavior.
+```text
+AI THAT HELPS ENGINEERS
+UNDERSTAND WAFER BEHAVIOR
+```
 
 The combination of:
 
+```text
 Computer Vision
-       +
+      +
 Deep Learning
-       +
+      +
 Explainable AI
-       +
+      +
 Generative AI
-       +
+      +
 Interactive Assistance
+```
 
-creates a foundation for intelligent semiconductor inspection.
+creates a foundation for intelligent semiconductor inspection systems.
 
-🏆 Project Highlights
+---
+
+# 🏆 Project Highlights
+
+```text
 ✓ 9-Class Wafer Classification
-✓ TensorFlow/Keras Deep Learning
+✓ TensorFlow / Keras Deep Learning
 ✓ Real-Time Inference
 ✓ Probability Distribution
 ✓ Grad-CAM Explainability
@@ -928,37 +1341,65 @@ creates a foundation for intelligent semiconductor inspection.
 ✓ Context-Aware AI Chat
 ✓ FastAPI REST Backend
 ✓ Interactive Web Interface
-✓ Vercel + Railway Deployment
-📊 Technical Specifications
-Component	Technology
-Frontend	HTML / CSS / JavaScript
-Backend	FastAPI
-Server	Uvicorn
-ML Framework	TensorFlow / Keras
-Image Processing	OpenCV / Pillow
-Numerical Processing	NumPy
-Explainability	Grad-CAM
-Generative AI	Google Gemini
-Frontend Deployment	Vercel
-Backend Deployment	Railway
-API Documentation	Swagger / ReDoc
-🔐 Security Notes
+✓ Swagger / ReDoc API
+✓ Cloud Deployment
+✓ Vercel + Railway Architecture
+```
+
+---
+
+# 📊 Technical Specifications
+
+| Component | Technology |
+|---|---|
+| Frontend | HTML / CSS / JavaScript |
+| Backend | FastAPI |
+| Server | Uvicorn |
+| ML Framework | TensorFlow / Keras |
+| Image Processing | OpenCV / Pillow |
+| Numerical Processing | NumPy |
+| Explainability | Grad-CAM |
+| Generative AI | Google Gemini |
+| Frontend Deployment | Vercel |
+| Backend Deployment | Railway |
+| API Documentation | Swagger / ReDoc |
+
+---
+
+# 🔐 Security Notes
 
 Never expose:
 
+```text
 GEMINI_API_KEY
+```
 
 in:
 
-GitHub
-Frontend JavaScript
-README
-Screenshots
-Public logs
+- GitHub repositories
+- Frontend JavaScript
+- README files
+- Screenshots
+- Public logs
+- Client-side code
 
-API keys should remain server-side.
+The Gemini API key should remain **server-side**.
 
-🧪 Example End-to-End Analysis
+Recommended `.gitignore`:
+
+```gitignore
+.env
+.env.*
+__pycache__/
+*.pyc
+.venv/
+```
+
+---
+
+# 🧪 Example End-to-End Analysis
+
+```text
 STEP 01
 User uploads wafer image
           ↓
@@ -1012,96 +1453,173 @@ Results displayed in dashboard
           ↓
 
 STEP 14
-User can ask WAFER GPT follow-up questions
-🌐 Live Project
-🚀 Backend
+User asks WAFER GPT follow-up questions
+```
 
-Railway
+---
+
+# 🌐 Live Project
+
+## 🚀 Backend
+
+**Railway**
 
 https://wafer-gpt-production.up.railway.app
-📚 API Documentation
+
+## 📚 API Documentation
+
 https://wafer-gpt-production.up.railway.app/docs
-🩺 Health Check
+
+## 🩺 Health Check
+
 https://wafer-gpt-production.up.railway.app/health
-💻 Source Code
+
+## 💻 Source Code
+
 https://github.com/Harshitcodes154/WAFER-GPT
 
-Replace/add the Vercel frontend URL here once you want the public frontend linked directly.
+> Add the Vercel frontend URL here once the public frontend deployment is finalized.
 
-🖼️ Project Screenshots
+---
 
-Add your real application screenshots below.
+# 🖼️ Project Visuals
 
-Dashboard
-![WAFER GPT Dashboard](./assets/dashboard.svg)
-Architecture
-<img src="./assets/architecture.svg" width="100%" alt="Architecture"/>
-AI Pipeline
-<img src="./assets/pipeline.svg" width="100%" alt="Pipeline"/>
-Grad-CAM
-<img src="./assets/gradcam.svg" width="100%" alt="Grad-CAM"/>
-💻 API Quick Test
+## Dashboard
+
+<img src="./assets/dashboard.svg" width="100%" alt="WAFER GPT Dashboard"/>
+
+---
+
+## Architecture
+
+<img src="./assets/architecture.svg" width="100%" alt="WAFER GPT Architecture"/>
+
+---
+
+## AI Pipeline
+
+<img src="./assets/pipeline.svg" width="100%" alt="WAFER GPT Pipeline"/>
+
+---
+
+## Grad-CAM
+
+<img src="./assets/gradcam.svg" width="100%" alt="WAFER GPT Grad-CAM"/>
+
+---
+
+## Gemini AI Flow
+
+<img src="./assets/gemini-flow.svg" width="100%" alt="Gemini AI Flow"/>
+
+---
+
+## Chatbot Flow
+
+<img src="./assets/chatbot-flow.svg" width="100%" alt="WAFER GPT Chatbot"/>
+
+---
+
+# 💻 API Quick Test
 
 After starting the backend:
 
+```bash
 curl http://127.0.0.1:8000/health
+```
 
 Expected:
 
+```json
 {
   "status": "healthy",
   "model_loaded": true,
   "gemini": true
 }
-🧰 Development Commands
-Start backend
+```
+
+---
+
+# 🧰 Development Commands
+
+## Start Backend
+
+```bash
 uvicorn main:app --reload
-Start on a specific port
+```
+
+## Start on Specific Port
+
+```bash
 uvicorn main:app --host 127.0.0.1 --port 8000
-Install dependencies
+```
+
+## Install Dependencies
+
+```bash
 pip install -r requirements.txt
-Git
+```
+
+## Git Workflow
+
+```bash
 git add .
 git commit -m "Update WAFER GPT"
 git push
-🤝 Contributing
+```
+
+---
+
+# 🤝 Contributing
 
 Contributions are welcome.
 
 Possible contribution areas:
 
+```text
 Model Improvements
-      ↓
-UI/UX
-      ↓
+       ↓
+UI / UX
+       ↓
 Explainability
-      ↓
+       ↓
 AI Analysis
-      ↓
+       ↓
 API Improvements
-      ↓
+       ↓
 Deployment
-      ↓
+       ↓
 Analytics
-Contribution Flow
-git fork
+```
+
+## Contribution Flow
+
+Fork the repository.
 
 Create a branch:
 
+```bash
 git checkout -b feature/new-feature
+```
 
-Commit:
+Commit your changes:
 
+```bash
 git add .
 git commit -m "Add new feature"
+```
 
 Push:
 
+```bash
 git push origin feature/new-feature
+```
 
 Then open a Pull Request.
 
-⭐ Support the Project
+---
+
+# ⭐ Support the Project
 
 If you find WAFER GPT interesting:
 
@@ -1115,26 +1633,46 @@ If you find WAFER GPT interesting:
 
 🤝 Contribute
 
-👨‍💻 Author
+---
+
+# 👨‍💻 Author
+
 <div align="center">
-Harshit Kumar
-AI/ML Developer • Hackathon Builder • Full-Stack AI Developer
-<br/> <a href="https://github.com/Harshitcodes154"> <img src="https://img.shields.io/badge/GitHub-Harshitcodes154-181717?style=for-the-badge&logo=github"/> </a>
+
+## Harshit Kumar
+
+### AI/ML Developer • Hackathon Builder • Full-Stack AI Developer
+
+<br/>
+
+<a href="https://github.com/Harshitcodes154">
+<img src="https://img.shields.io/badge/GitHub-Harshitcodes154-181717?style=for-the-badge&logo=github" alt="GitHub"/>
+</a>
 
 <br/><br/>
 
 Built with ❤️ using
 
-TensorFlow • FastAPI • OpenCV • Grad-CAM • Gemini AI
+**TensorFlow • FastAPI • OpenCV • Grad-CAM • Gemini AI**
 
 </div>
+
+---
+
 <div align="center">
-⚡ WAFER GPT
-DETECT. EXPLAIN. UNDERSTAND.
-<br/> <img src="./assets/hero.svg" width="100%" alt="WAFER GPT"/>
+
+# ⚡ WAFER GPT
+
+### DETECT. EXPLAIN. UNDERSTAND.
+
+<img src="./assets/hero.svg" width="100%" alt="WAFER GPT"/>
 
 <br/><br/>
 
-AI-Powered Semiconductor Wafer Defect Intelligence
+**AI-Powered Semiconductor Wafer Defect Intelligence**
 
-</div> ```
+<br/>
+
+⭐ Star the repository if you find the project useful.
+
+</div>
