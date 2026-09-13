@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 650">
+<defs><linearGradient id="grad"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#818cf8"/></linearGradient>
+<filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="1500" height="650" rx="30" fill="#050912"/>
+<text x="750" y="58" text-anchor="middle" fill="#e2e8f0" font-family="Arial" font-size="36" font-weight="800">WAFER GPT SYSTEM ARCHITECTURE</text>
+<text x="750" y="91" text-anchor="middle" fill="#64748b" font-family="Arial" font-size="15">Frontend → API → ML → Explainability → Generative AI</text>
+<g font-family="Arial" text-anchor="middle">
+<rect x="80" y="160" width="220" height="100" rx="20" fill="#0b1420" stroke="#22d3ee" stroke-width="2"/>
+<text x="190.0" y="202" fill="#22d3ee" font-size="21" font-weight="800">FRONTEND</text>
+<text x="190.0" y="232" fill="#cbd5e1" font-size="15">HTML • CSS • JS</text></g><g font-family="Arial" text-anchor="middle">
+<rect x="350" y="160" width="220" height="100" rx="20" fill="#0b1420" stroke="#22d3ee" stroke-width="2"/>
+<text x="460.0" y="202" fill="#22d3ee" font-size="21" font-weight="800">FASTAPI</text>
+<text x="460.0" y="232" fill="#cbd5e1" font-size="15">REST • Uvicorn</text></g><g font-family="Arial" text-anchor="middle">
+<rect x="620" y="160" width="220" height="100" rx="20" fill="#0b1420" stroke="#818cf8" stroke-width="2"/>
+<text x="730.0" y="202" fill="#818cf8" font-size="21" font-weight="800">TENSORFLOW</text>
+<text x="730.0" y="232" fill="#cbd5e1" font-size="15">9-Class CNN</text></g><g font-family="Arial" text-anchor="middle">
+<rect x="890" y="160" width="220" height="100" rx="20" fill="#0b1420" stroke="#a78bfa" stroke-width="2"/>
+<text x="1000.0" y="202" fill="#a78bfa" font-size="21" font-weight="800">GRAD-CAM</text>
+<text x="1000.0" y="232" fill="#cbd5e1" font-size="15">Explainable AI</text></g><g font-family="Arial" text-anchor="middle">
+<rect x="1160" y="160" width="220" height="100" rx="20" fill="#0b1420" stroke="#c4b5fd" stroke-width="2"/>
+<text x="1270.0" y="202" fill="#c4b5fd" font-size="21" font-weight="800">GEMINI</text>
+<text x="1270.0" y="232" fill="#cbd5e1" font-size="15">AI Analysis</text></g><g font-family="Arial" text-anchor="middle">
+<rect x="700" y="390" width="260" height="110" rx="20" fill="#0b1420" stroke="#22d3ee" stroke-width="2"/>
+<text x="830.0" y="432" fill="#22d3ee" font-size="21" font-weight="800">WAFER GPT CHAT</text>
+<text x="830.0" y="462" fill="#cbd5e1" font-size="15">Context-aware</text></g><path d="M300 210 L350 210" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="11 9">
+<animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1s" repeatCount="indefinite"/></path><path d="M570 210 L620 210" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="11 9">
+<animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1s" repeatCount="indefinite"/></path><path d="M840 210 L890 210" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="11 9">
+<animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1s" repeatCount="indefinite"/></path><path d="M1110 210 L1160 210" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="11 9">
+<animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1s" repeatCount="indefinite"/></path><path d="M1290 260 L830 390" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="11 9">
+<animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1s" repeatCount="indefinite"/></path><text x="750" y="590" text-anchor="middle" fill="#64748b" font-family="Arial" font-size="17">IMAGE • PREDICTION • CONFIDENCE • GRAD-CAM • AI INSIGHT • CHAT</text></svg>

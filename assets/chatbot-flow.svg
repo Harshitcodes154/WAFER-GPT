@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 650">
+<defs><linearGradient id="grad"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#818cf8"/></linearGradient>
+<filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="1500" height="650" rx="30" fill="#050912"/>
+<text x="750" y="58" text-anchor="middle" fill="#e2e8f0" font-family="Arial" font-size="36" font-weight="800">CONTEXT-AWARE WAFER GPT CHAT</text>
+<text x="750" y="91" text-anchor="middle" fill="#64748b" font-family="Arial" font-size="15">The assistant receives the current wafer context</text>
+<g font-family="Arial" text-anchor="middle">
+<rect x="80" y="170" width="330" height="320" rx="20" fill="#0b1420" stroke="#22d3ee" stroke-width="2"/>
+<text x="245.0" y="212" fill="#22d3ee" font-size="21" font-weight="800">WAFER CONTEXT</text>
+<text x="245.0" y="242" fill="#cbd5e1" font-size="15">Prediction • Confidence • Probabilities</text></g><g font-family="Arial" text-anchor="middle">
+<rect x="585" y="260" width="330" height="120" rx="20" fill="#0b1420" stroke="#818cf8" stroke-width="2"/>
+<text x="750.0" y="302" fill="#818cf8" font-size="21" font-weight="800">GEMINI AI</text>
+<text x="750.0" y="332" fill="#cbd5e1" font-size="15">Context + Question</text></g><g font-family="Arial" text-anchor="middle">
+<rect x="1090" y="170" width="330" height="320" rx="20" fill="#0b1420" stroke="#22d3ee" stroke-width="2"/>
+<text x="1255.0" y="212" fill="#22d3ee" font-size="21" font-weight="800">ENGINEER ASSISTANT</text>
+<text x="1255.0" y="242" fill="#cbd5e1" font-size="15">Why low confidence? • Explain defect • Potential causes</text></g><path d="M410 330 L585 320" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="11 9">
+<animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1s" repeatCount="indefinite"/></path><path d="M915 320 L1090 330" fill="none" stroke="url(#grad)" stroke-width="4" stroke-dasharray="11 9">
+<animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1s" repeatCount="indefinite"/></path><text x="750" y="545" text-anchor="middle" fill="#94a3b8" font-family="Arial" font-size="18">Not a generic chatbot — responses are grounded in the supplied wafer-analysis context.</text></svg>
