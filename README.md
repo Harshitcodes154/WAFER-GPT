@@ -1,84 +1,82 @@
 <div align="center">
 
-<img src="./assets/hero.svg" width="100%"/>
+# ⚡ WAFER GPT
 
-<br><br>
+### AI-Powered Semiconductor Wafer Defect Intelligence
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=20&pause=1200&color=22D3EE&center=true&vCenter=true&width=900&lines=DETECT+%E2%86%92+CLASSIFY+%E2%86%92+EXPLAIN+%E2%86%92+UNDERSTAND;AI+%2B+COMPUTER+VISION+%2B+EXPLAINABLE+AI;TURNING+WAFER+MAPS+INTO+ACTIONABLE+INTELLIGENCE;SEMICONDUCTOR+DEFECT+INTELLIGENCE+POWERED+BY+AI" />
+<img src="./assets/hero.svg" width="100%" alt="WAFER GPT"/>
 
-<br><br>
+<br/>
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=18&pause=1000&color=22D3EE&center=true&vCenter=true&width=850&lines=DETECT+%7C+CLASSIFY+%7C+EXPLAIN+%7C+UNDERSTAND;AI+POWERED+WAFER+DEFECT+INTELLIGENCE;COMPUTER+VISION+%2B+EXPLAINABLE+AI+%2B+GENERATIVE+AI;TURNING+WAFER+IMAGES+INTO+ACTIONABLE+INSIGHTS"/>
+
+<br/><br/>
 
 <a href="https://github.com/Harshitcodes154/WAFER-GPT">
-<img src="https://img.shields.io/github/stars/Harshitcodes154/WAFER-GPT?style=for-the-badge&logo=github&label=STARS"/>
+<img src="https://img.shields.io/badge/GitHub-WAFER--GPT-181717?style=for-the-badge&logo=github"/>
 </a>
 
-<a href="https://github.com/Harshitcodes154/WAFER-GPT/network/members">
-<img src="https://img.shields.io/github/forks/Harshitcodes154/WAFER-GPT?style=for-the-badge&logo=github&label=FORKS"/>
-</a>
+<img src="https://img.shields.io/badge/TensorFlow-Deep%20Learning-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white"/>
 
-<a href="https://github.com/Harshitcodes154/WAFER-GPT/commits/main">
-<img src="https://img.shields.io/github/last-commit/Harshitcodes154/WAFER-GPT?style=for-the-badge"/>
-</a>
-
-<img src="https://img.shields.io/badge/AI-Semiconductor%20Intelligence-06b6d4?style=for-the-badge"/>
-<img src="https://img.shields.io/badge/TensorFlow-CNN-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white"/>
 <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white"/>
-<img src="https://img.shields.io/badge/Gemini-Generative%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white"/>
+
+<img src="https://img.shields.io/badge/Google%20Gemini-Generative%20AI-4285F4?style=for-the-badge&logo=google&logoColor=white"/>
+
 <img src="https://img.shields.io/badge/Grad--CAM-Explainable%20AI-7C3AED?style=for-the-badge"/>
 
-<br><br>
+<img src="https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white"/>
 
-### 🧠 Detect. Explain. Understand.
+<br/><br/>
 
-**WaferGPT is an AI-powered semiconductor wafer defect intelligence platform that combines Deep Learning, Computer Vision, Grad-CAM and Generative AI.**
+### 🚀 Detect. Explain. Understand.
+
+**WAFER GPT is an AI-powered semiconductor wafer defect intelligence platform that combines Deep Learning, Computer Vision, Grad-CAM Explainable AI and Google Gemini to analyze wafer patterns and generate human-readable insights.**
 
 </div>
 
 ---
 
-# 🚀 WAFER GPT
+# 🧠 What is WAFER GPT?
 
-## AI-Powered Semiconductor Wafer Defect Intelligence
+**WAFER GPT** is an end-to-end AI system designed for intelligent semiconductor wafer defect analysis.
 
-WaferGPT is an end-to-end AI platform designed to analyze semiconductor wafer images, classify defect patterns, visualize model attention and generate human-readable engineering insights.
-
-The system combines:
-
-- 🧠 Deep Learning
-- 👁️ Computer Vision
-- 🔥 Explainable AI
-- 🤖 Generative AI
-- 📊 Probability Analysis
-- 💬 Contextual AI Chat
-- ⚡ FastAPI REST APIs
-
-The core philosophy is simple:
-
-> **Don't just predict the defect. Explain the prediction.**
-
----
-
-# 🌌 AI Analysis Pipeline
-
-<img src="./assets/pipeline.svg" width="100%"/>
-
----
-
-# 🎯 The Problem
-
-Semiconductor wafer inspection generates large amounts of visual inspection data.
-
-Identifying wafer defect patterns can require:
-
-- Manual inspection
-- Pattern recognition
-- Defect classification
-- Engineering interpretation
-- Root-cause investigation
-- Repeated analysis
-
-A traditional AI classifier may only return:
+Instead of providing only a machine-learning classification, WAFER GPT creates a complete analysis pipeline:
 
 ```text
-Prediction: Scratch
-Confidence: 91.42%
+                ┌──────────────────────┐
+                │     WAFER IMAGE      │
+                └──────────┬───────────┘
+                           │
+                           ▼
+                ┌──────────────────────┐
+                │ IMAGE PREPROCESSING  │
+                │   PIL + NumPy + CV   │
+                └──────────┬───────────┘
+                           │
+                           ▼
+                ┌──────────────────────┐
+                │   TENSORFLOW / CNN   │
+                │   DEFECT CLASSIFIER  │
+                └──────────┬───────────┘
+                           │
+             ┌─────────────┼─────────────┐
+             ▼             ▼             ▼
+        PREDICTION     CONFIDENCE   PROBABILITIES
+             │
+             ▼
+        ┌───────────────┐
+        │   GRAD-CAM    │
+        │ EXPLANABILITY │
+        └───────┬───────┘
+                │
+                ▼
+        ┌───────────────┐
+        │   GEMINI AI   │
+        │  EXPLANATION  │
+        └───────┬───────┘
+                │
+                ▼
+        ┌───────────────┐
+        │ WAFER GPT CHAT│
+        │   ASSISTANT   │
+        └───────────────┘
