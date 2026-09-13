@@ -1,0 +1,182 @@
+<svg width="1200" height="500" viewBox="0 0 1200 500"
+xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+
+  <radialGradient id="bg">
+    <stop offset="0%" stop-color="#0e7490"/>
+    <stop offset="45%" stop-color="#082f49"/>
+    <stop offset="100%" stop-color="#020617"/>
+  </radialGradient>
+
+  <linearGradient id="scan">
+    <stop offset="0%" stop-color="#22d3ee" stop-opacity="0"/>
+    <stop offset="50%" stop-color="#67e8f9"/>
+    <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+  </linearGradient>
+
+  <filter id="glow">
+    <feGaussianBlur stdDeviation="8" result="blur"/>
+    <feMerge>
+      <feMergeNode in="blur"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+
+  <pattern id="grid" width="35" height="35" patternUnits="userSpaceOnUse">
+    <path d="M35 0H0V35"
+          fill="none"
+          stroke="#22d3ee"
+          stroke-opacity=".08"/>
+  </pattern>
+
+</defs>
+
+<!-- BACKGROUND -->
+
+<rect width="1200" height="500" fill="url(#bg)"/>
+
+<rect width="1200" height="500" fill="url(#grid)"/>
+
+<!-- PARTICLES -->
+
+<g fill="#67e8f9">
+
+  <circle cx="80" cy="100" r="2">
+    <animate attributeName="cy"
+             values="100;70;100"
+             dur="3s"
+             repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="1080" cy="120" r="2">
+    <animate attributeName="cy"
+             values="120;160;120"
+             dur="4s"
+             repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="170" cy="400" r="2">
+    <animate attributeName="cx"
+             values="170;210;170"
+             dur="3.5s"
+             repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="1030" cy="380" r="2">
+    <animate attributeName="cx"
+             values="1030;990;1030"
+             dur="4s"
+             repeatCount="indefinite"/>
+  </circle>
+
+</g>
+
+<!-- WAFER -->
+
+<g transform="translate(600 230)">
+
+  <circle r="155"
+          fill="#020617"
+          stroke="#22d3ee"
+          stroke-width="3"
+          filter="url(#glow)"/>
+
+  <circle r="135"
+          fill="none"
+          stroke="#0ea5e9"
+          stroke-opacity=".5"
+          stroke-width="2"/>
+
+  <circle r="105"
+          fill="none"
+          stroke="#22d3ee"
+          stroke-opacity=".3"/>
+
+  <circle r="75"
+          fill="none"
+          stroke="#67e8f9"
+          stroke-opacity=".2"/>
+
+  <!-- wafer grid -->
+
+  <path d="M-155 0H155M0-155V155"
+        stroke="#22d3ee"
+        stroke-opacity=".25"/>
+
+  <path d="M-110-110L110 110M110-110L-110 110"
+        stroke="#22d3ee"
+        stroke-opacity=".15"/>
+
+  <!-- DEFECTS -->
+
+  <g fill="#ef4444" filter="url(#glow)">
+
+    <circle cx="-70" cy="-40" r="7">
+      <animate attributeName="r"
+               values="5;10;5"
+               dur="1.5s"
+               repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="55" cy="70" r="6">
+      <animate attributeName="r"
+               values="4;9;4"
+               dur="1.8s"
+               repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="80" cy="-65" r="5">
+      <animate attributeName="r"
+               values="4;8;4"
+               dur="2s"
+               repeatCount="indefinite"/>
+    </circle>
+
+  </g>
+
+  <!-- SCANNING BEAM -->
+
+  <rect x="-160"
+        y="-4"
+        width="320"
+        height="8"
+        fill="url(#scan)"
+        filter="url(#glow)">
+
+    <animate attributeName="y"
+             values="-150;150;-150"
+             dur="3s"
+             repeatCount="indefinite"/>
+
+  </rect>
+
+</g>
+
+<!-- TITLE -->
+
+<text x="600"
+      y="425"
+      text-anchor="middle"
+      font-family="Arial, Helvetica, sans-serif"
+      font-size="58"
+      font-weight="800"
+      fill="white">
+
+  WAFER GPT
+
+</text>
+
+<text x="600"
+      y="462"
+      text-anchor="middle"
+      font-family="Arial, Helvetica, sans-serif"
+      font-size="18"
+      letter-spacing="5"
+      fill="#67e8f9">
+
+  AI SEMICONDUCTOR DEFECT INTELLIGENCE
+
+</text>
+
+</svg>
