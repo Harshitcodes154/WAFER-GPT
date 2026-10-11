@@ -2,7 +2,7 @@
 // WAFER GPT FRONTEND
 // ============================================================
 
-const API_URL = "https://wafer-gpt-production.up.railway.app";;
+const API_URL = "https://wafer-gpt-qwgy-j9hzcz6sq-harshitkumar7212-6004s-projects.vercel.app/";;
 
 let selectedFile = null;
 
