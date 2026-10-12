@@ -1,24 +1,15 @@
 
 import { Client, handle_file } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
 
-// ============================================================
-// WAFER-GPT FRONTEND — HUGGING FACE INTEGRATION
-// ============================================================
-
+// WAFER-GPT Hugging Face Space
 const SPACE_ID = "harshitcodes1544/WAFER-GPT";
-
-// Confirm this endpoint in your Space's "Use via API" section.
-// If the API page shows another name, update this value.
 const PREDICT_ENDPOINT = "/predict_wafer";
+const CHAT_ENDPOINT = "/chat_response";
 
+let clientPromise = null;
 let selectedFile = null;
 let currentAnalysis = null;
-let gradioClientPromise = null;
 let isAnalyzing = false;
-
-// ============================================================
-// DOM ELEMENTS
-// ============================================================
 
 const $ = (id) => document.getElementById(id);
 
@@ -52,103 +43,73 @@ const chatSendBtn = $("chatSendBtn");
 const chatMessages = $("chatMessages");
 const chatStatus = $("chatStatus");
 
-console.log("WAFER-GPT frontend loaded.");
+// ------------------------------------------------------------
+// CONNECT TO HUGGING FACE
+// ------------------------------------------------------------
 
-// ============================================================
-// HUGGING FACE GRADIO CLIENT
-// ============================================================
-
-async function getGradioClient() {
-    if (!gradioClientPromise) {
-        gradioClientPromise = Client.connect(SPACE_ID);
+async function getClient() {
+    if (!clientPromise) {
+        clientPromise = Client.connect(SPACE_ID);
     }
 
     try {
-        return await gradioClientPromise;
+        return await clientPromise;
     } catch (error) {
-        gradioClientPromise = null;
+        clientPromise = null;
         throw error;
     }
 }
 
-// ============================================================
-// FILE VALIDATION
-// ============================================================
+// ------------------------------------------------------------
+// FILE UPLOAD AND PREVIEW
+// ------------------------------------------------------------
 
-function validateFile(file) {
-    if (!file) {
-        alert("Please select a wafer image first.");
-        return false;
+function formatFileSize(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
     }
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
 
-    const allowedTypes = [
-        "image/png",
-        "image/jpeg",
-        "image/webp"
-    ];
+function showPreview(file) {
+    if (!file) return;
 
-    if (!allowedTypes.includes(file.type)) {
+    if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
         alert("Please select a PNG, JPG, JPEG or WEBP image.");
-        return false;
+        return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
         alert("Maximum image size is 10 MB.");
-        return false;
-    }
-
-    return true;
-}
-
-function formatFileSize(bytes) {
-    if (bytes < 1024) return `${bytes} B`;
-
-    if (bytes < 1024 * 1024) {
-        return `${(bytes / 1024).toFixed(1)} KB`;
-    }
-
-    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-}
-
-// ============================================================
-// IMAGE PREVIEW
-// ============================================================
-
-function showPreview(file) {
-    if (!validateFile(file)) {
         return;
     }
 
     selectedFile = file;
 
     if (previewImage) {
+        if (previewImage.src.startsWith("blob:")) {
+            URL.revokeObjectURL(previewImage.src);
+        }
         previewImage.src = URL.createObjectURL(file);
     }
 
     if (fileName) fileName.textContent = file.name;
     if (fileSize) fileSize.textContent = formatFileSize(file.size);
 
-    if (uploadPlaceholder) {
-        uploadPlaceholder.style.display = "none";
-    }
-
-    if (previewContainer) {
-        previewContainer.style.display = "block";
-    }
+    if (uploadPlaceholder) uploadPlaceholder.style.display = "none";
+    if (previewContainer) previewContainer.style.display = "block";
 
     if (analyzeBtn) {
         analyzeBtn.disabled = false;
         analyzeBtn.style.opacity = "1";
         analyzeBtn.style.cursor = "pointer";
     }
-
-    // Do not automatically run inference when previewing.
 }
 
 if (fileInput) {
     fileInput.addEventListener("change", () => {
-        const file = fileInput.files?.[0];
-        if (file) showPreview(file);
+        showPreview(fileInput.files?.[0]);
     });
 }
 
@@ -163,7 +124,6 @@ if (browseText && fileInput) {
 if (uploadBox && fileInput) {
     uploadBox.addEventListener("click", (event) => {
         if (
-            event.target === removeBtn ||
             removeBtn?.contains(event.target) ||
             previewContainer?.contains(event.target)
         ) {
@@ -186,15 +146,13 @@ if (uploadBox && fileInput) {
     uploadBox.addEventListener("drop", (event) => {
         event.preventDefault();
         uploadBox.classList.remove("dragging");
-
-        const file = event.dataTransfer?.files?.[0];
-        if (file) showPreview(file);
+        showPreview(event.dataTransfer?.files?.[0]);
     });
 }
 
-// ============================================================
-// RESET UPLOAD
-// ============================================================
+// ------------------------------------------------------------
+// RESET
+// ------------------------------------------------------------
 
 function resetUpload() {
     selectedFile = null;
@@ -209,18 +167,12 @@ function resetUpload() {
         previewImage.removeAttribute("src");
     }
 
-    if (uploadPlaceholder) {
-        uploadPlaceholder.style.display = "block";
-    }
-
-    if (previewContainer) {
-        previewContainer.style.display = "none";
-    }
+    if (uploadPlaceholder) uploadPlaceholder.style.display = "block";
+    if (previewContainer) previewContainer.style.display = "none";
 
     if (analyzeBtn) {
         analyzeBtn.disabled = true;
         analyzeBtn.style.opacity = "0.6";
-        analyzeBtn.style.cursor = "not-allowed";
     }
 }
 
@@ -232,9 +184,9 @@ if (removeBtn) {
     });
 }
 
-// ============================================================
-// ANALYZE BUTTON
-// ============================================================
+// ------------------------------------------------------------
+// ANALYZE IMAGE
+// ------------------------------------------------------------
 
 if (analyzeBtn) {
     analyzeBtn.addEventListener("click", async (event) => {
@@ -249,10 +201,6 @@ if (analyzeBtn) {
     });
 }
 
-// ============================================================
-// RUN MODEL ON HUGGING FACE
-// ============================================================
-
 async function analyzeWafer() {
     if (!selectedFile || isAnalyzing) return;
 
@@ -263,46 +211,72 @@ async function analyzeWafer() {
 
     if (analyzeBtn) {
         analyzeBtn.disabled = true;
-        analyzeBtn.innerHTML =
-            "<span>Analyzing...</span><span>⏳</span>";
+        analyzeBtn.innerHTML = "<span>Analyzing...</span><span>⏳</span>";
     }
 
     try {
-        console.log("Connecting to Hugging Face Space:", SPACE_ID);
-
-        const client = await getGradioClient();
-
-        console.log("Uploading image and requesting prediction...");
+        const client = await getClient();
 
         const result = await client.predict(PREDICT_ENDPOINT, [
             await handle_file(selectedFile)
         ]);
 
-        console.log("Gradio API response:", result);
+        console.log("Prediction response:", result);
 
-        const normalized = normalizeResult(result);
-        displayResults(normalized);
+        const scores = result?.data?.[0];
+        const heatmap = result?.data?.[1];
+
+        if (!scores || typeof scores !== "object" || Array.isArray(scores)) {
+            throw new Error(
+                "Unexpected prediction response. Check the Space's Use via API page."
+            );
+        }
+
+        const entries = Object.entries(scores)
+            .filter(([, value]) => Number.isFinite(Number(value)))
+            .sort((a, b) => Number(b[1]) - Number(a[1]));
+
+        if (!entries.length) {
+            throw new Error("No class probabilities were returned by the model.");
+        }
+
+        const [bestLabel, bestScore] = entries[0];
+        const scoreTotal = entries.reduce(
+            (sum, [, value]) => sum + Number(value),
+            0
+        );
+
+        const normalizedScores = {};
+        for (const [label, value] of entries) {
+            normalizedScores[label] = scoreTotal > 0
+                ? Number(value) / scoreTotal
+                : 0;
+        }
+
+        const confidencePercent = normalizedScores[bestLabel] * 100;
+
+        currentAnalysis = {
+            prediction: bestLabel,
+            confidence: confidencePercent,
+            probabilities: normalizedScores,
+            llm_analysis: ""
+        };
+
+        displayResults(currentAnalysis, heatmap);
 
     } catch (error) {
-        console.error("Wafer analysis failed:", error);
-
-        const message = error?.message || String(error);
+        console.error("Analysis failed:", error);
 
         alert(
             "Analysis failed.\n\n" +
-            "Check these things:\n" +
-            "1. Your Hugging Face Space is running.\n" +
-            "2. The API endpoint is correct.\n" +
-            "3. The Space's prediction function accepts an image.\n\n" +
-            "Error: " + message
+            (error?.message || String(error)) +
+            "\n\nCheck that the Space is running and the API endpoint is correct."
         );
 
     } finally {
         isAnalyzing = false;
 
-        if (loadingSection) {
-            loadingSection.style.display = "none";
-        }
+        if (loadingSection) loadingSection.style.display = "none";
 
         if (analyzeBtn) {
             analyzeBtn.disabled = !selectedFile;
@@ -312,205 +286,57 @@ async function analyzeWafer() {
     }
 }
 
-// ============================================================
-// NORMALIZE MODEL RESPONSE
-// ============================================================
+// ------------------------------------------------------------
+// SHOW RESULTS AND GRAD-CAM
+// ------------------------------------------------------------
 
-function normalizeResult(result) {
-    const data = result?.data;
+function displayResults(data, heatmap) {
+    if (prediction) prediction.textContent = data.prediction;
 
-    if (!Array.isArray(data) || data.length === 0) {
-        throw new Error(
-            "The Space returned an empty response. Check its output format."
-        );
-    }
+    const conf = Math.max(0, Math.min(100, data.confidence || 0));
 
-    // Gradio may return a dictionary, a label, or a list of labels/scores.
-    let raw = data[0];
-
-    // Some interfaces return a prediction dictionary in the first output.
-    if (raw && typeof raw === "object" && !Array.isArray(raw)) {
-        const scores =
-            raw.probabilities ??
-            raw.confidences ??
-            raw.scores ??
-            null;
-
-        if (scores && typeof scores === "object") {
-            const entries = Array.isArray(scores)
-                ? scores.map((value, index) => [String(index), value])
-                : Object.entries(scores);
-
-            if (entries.length > 0) {
-                const best = entries.reduce((a, b) =>
-                    Number(b[1]) > Number(a[1]) ? b : a
-                );
-
-                const maxValue = Number(best[1]);
-                const usesPercent = entries.some(
-                    ([, value]) => Number(value) > 1
-                );
-
-                const probabilityMap = {};
-
-                for (const [label, value] of entries) {
-                    let number = Number(value);
-                    if (!Number.isFinite(number)) continue;
-
-                    if (usesPercent) number /= 100;
-                    probabilityMap[label] = number;
-                }
-
-                let predictedLabel =
-                    raw.prediction ?? raw.label ?? best[0];
-
-                let conf = Number(raw.confidence);
-
-                if (!Number.isFinite(conf)) {
-                    conf = usesPercent
-                        ? maxValue
-                        : maxValue * 100;
-                } else if (conf <= 1) {
-                    conf *= 100;
-                }
-
-                return {
-                    prediction: String(predictedLabel),
-                    confidence: conf,
-                    probabilities: probabilityMap,
-                    llm_analysis:
-                        raw.llm_analysis ??
-                        raw.analysis ??
-                        ""
-                };
-            }
-        }
-
-        // Handle an object that contains only a predicted class.
-        if (raw.prediction || raw.label) {
-            let conf = Number(raw.confidence ?? 0);
-
-            if (conf > 0 && conf <= 1) conf *= 100;
-
-            return {
-                prediction: String(raw.prediction ?? raw.label),
-                confidence: conf,
-                probabilities: {},
-                llm_analysis:
-                    raw.llm_analysis ?? raw.analysis ?? ""
-            };
-        }
-    }
-
-    // A plain string output may be the predicted class.
-    if (typeof raw === "string") {
-        return {
-            prediction: raw,
-            confidence: 0,
-            probabilities: {},
-            llm_analysis: ""
-        };
-    }
-
-    // Support an array of {label, confidence/score} entries.
-    if (Array.isArray(raw)) {
-        const entries = raw.filter(
-            item =>
-                item &&
-                typeof item === "object" &&
-                ("label" in item)
-        );
-
-        if (entries.length) {
-            const scoreOf = item =>
-                Number(item.confidence ?? item.score ?? 0);
-
-            const best = entries.reduce((a, b) =>
-                scoreOf(b) > scoreOf(a) ? b : a
-            );
-
-            const probabilityMap = {};
-
-            for (const item of entries) {
-                let score = scoreOf(item);
-                if (score > 1) score /= 100;
-                probabilityMap[String(item.label)] = score;
-            }
-
-            let conf = scoreOf(best);
-            if (conf <= 1) conf *= 100;
-
-            return {
-                prediction: String(best.label),
-                confidence: conf,
-                probabilities: probabilityMap,
-                llm_analysis: ""
-            };
-        }
-    }
-
-    throw new Error(
-        "Unsupported model response. Open the browser console to inspect the Gradio response."
-    );
-}
-
-// ============================================================
-// DISPLAY RESULTS
-// ============================================================
-
-function displayResults(data) {
-    currentAnalysis = data;
-
-    if (prediction) {
-        prediction.textContent = data.prediction || "Unknown";
-    }
-
-    const conf = Math.max(
-        0,
-        Math.min(100, Number(data.confidence) || 0)
-    );
-
-    if (confidence) {
-        confidence.textContent = `${conf.toFixed(2)}%`;
-    }
-
-    if (confidenceBar) {
-        confidenceBar.style.width = `${conf}%`;
-    }
+    if (confidence) confidence.textContent = `${conf.toFixed(2)}%`;
+    if (confidenceBar) confidenceBar.style.width = `${conf}%`;
 
     if (severity) {
-        severity.textContent = calculateSeverity(conf);
+        severity.textContent =
+            conf >= 90 ? "HIGH" : conf >= 70 ? "MEDIUM" : "LOW";
     }
 
-    // Show the uploaded image as the original image.
     if (originalImage && selectedFile) {
         if (originalImage.src.startsWith("blob:")) {
             URL.revokeObjectURL(originalImage.src);
         }
-
         originalImage.src = URL.createObjectURL(selectedFile);
     }
 
-    // The current classification function may not return Grad-CAM.
-    // Clear the image instead of showing a broken URL.
     if (gradcamImage) {
-        gradcamImage.removeAttribute("src");
+        const heatmapUrl =
+            typeof heatmap === "string"
+                ? heatmap
+                : heatmap?.url || heatmap?.path || null;
+
+        if (heatmapUrl) {
+            gradcamImage.src = heatmapUrl;
+            gradcamImage.style.display = "block";
+        } else {
+            gradcamImage.removeAttribute("src");
+            console.warn("No Grad-CAM image returned by the Space.");
+        }
     }
 
-    renderProbabilities(data.probabilities || {});
+    renderProbabilities(data.probabilities);
 
     if (llmAnalysis) {
         llmAnalysis.textContent =
-            data.llm_analysis ||
-            "AI analysis is not included in the current model response.";
+            "Ask the Gemini assistant below for an explanation of this prediction.";
     }
 
     if (chatInput) chatInput.disabled = false;
     if (chatSendBtn) chatSendBtn.disabled = false;
 
     if (chatStatus) {
-        chatStatus.textContent =
-            "Prediction ready. Chat requires a configured chat backend.";
+        chatStatus.textContent = "Gemini assistant is ready.";
     }
 
     if (resultsSection) {
@@ -527,37 +353,24 @@ function displayResults(data) {
     }
 }
 
-// ============================================================
-// SEVERITY
-// ============================================================
-
-function calculateSeverity(value) {
-    if (value >= 90) return "HIGH";
-    if (value >= 70) return "MEDIUM";
-    return "LOW";
-}
-
-// ============================================================
-// PROBABILITY BARS
-// ============================================================
+// ------------------------------------------------------------
+// CLASS PROBABILITIES
+// ------------------------------------------------------------
 
 function renderProbabilities(data) {
     if (!probabilities) return;
 
     probabilities.innerHTML = "";
 
-    const entries = Object.entries(data).sort(
+    const entries = Object.entries(data || {}).sort(
         (a, b) => Number(b[1]) - Number(a[1])
     );
 
     for (const [label, value] of entries) {
-        let percentage = Number(value) * 100;
-
-        if (Number(value) > 1) {
-            percentage = Number(value);
-        }
-
-        percentage = Math.max(0, Math.min(100, percentage));
+        const percentage = Math.max(
+            0,
+            Math.min(100, Number(value) * 100)
+        );
 
         const row = document.createElement("div");
         row.className = "probability-row";
@@ -565,13 +378,13 @@ function renderProbabilities(data) {
         const info = document.createElement("div");
         info.className = "probability-info";
 
-        const labelElement = document.createElement("span");
-        labelElement.textContent = label;
+        const labelEl = document.createElement("span");
+        labelEl.textContent = label;
 
-        const valueElement = document.createElement("span");
-        valueElement.textContent = `${percentage.toFixed(2)}%`;
+        const valueEl = document.createElement("span");
+        valueEl.textContent = `${percentage.toFixed(2)}%`;
 
-        info.append(labelElement, valueElement);
+        info.append(labelEl, valueEl);
 
         const track = document.createElement("div");
         track.className = "probability-track";
@@ -586,17 +399,101 @@ function renderProbabilities(data) {
     }
 }
 
-// ============================================================
-// NEW ANALYSIS
-// ============================================================
+// ------------------------------------------------------------
+// GEMINI CHAT
+// ------------------------------------------------------------
 
-if (newAnalysisBtn) {
-    newAnalysisBtn.addEventListener("click", event => {
+function addChatMessage(message, role) {
+    if (!chatMessages) return;
+
+    const element = document.createElement("div");
+    element.className = `chat-message ${role}-message`;
+    element.textContent = message;
+
+    chatMessages.appendChild(element);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+if (chatForm) {
+    chatForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        if (resultsSection) {
-            resultsSection.style.display = "none";
+        const message = chatInput?.value.trim();
+
+        if (!message) return;
+
+        if (!currentAnalysis) {
+            alert("Please analyze a wafer before asking Gemini.");
+            return;
         }
+
+        addChatMessage(message, "user");
+
+        if (chatInput) {
+            chatInput.value = "";
+            chatInput.disabled = true;
+        }
+
+        if (chatSendBtn) chatSendBtn.disabled = true;
+        if (chatStatus) chatStatus.textContent = "Gemini is thinking...";
+
+        try {
+            const client = await getClient();
+
+            const result = await client.predict(CHAT_ENDPOINT, [
+                message,
+                currentAnalysis.prediction,
+                `${currentAnalysis.confidence.toFixed(2)}%`,
+                JSON.stringify(currentAnalysis.probabilities),
+                currentAnalysis.llm_analysis || ""
+            ]);
+
+            const answer = result?.data?.[0];
+
+            if (typeof answer !== "string" || !answer.trim()) {
+                throw new Error("Gemini returned an empty response.");
+            }
+
+            addChatMessage(answer, "assistant");
+
+            if (chatStatus) {
+                chatStatus.textContent = "Gemini assistant is ready.";
+            }
+
+        } catch (error) {
+            console.error("Gemini chat failed:", error);
+
+            addChatMessage(
+                "Gemini could not respond: " +
+                (error?.message || String(error)),
+                "assistant"
+            );
+
+            if (chatStatus) {
+                chatStatus.textContent =
+                    "Chat failed. Check the Space logs and GEMINI_API_KEY secret.";
+            }
+
+        } finally {
+            if (chatInput) {
+                chatInput.disabled = false;
+                chatInput.focus();
+            }
+
+            if (chatSendBtn) chatSendBtn.disabled = false;
+        }
+    });
+}
+
+// ------------------------------------------------------------
+// NEW ANALYSIS
+// ------------------------------------------------------------
+
+if (newAnalysisBtn) {
+    newAnalysisBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        if (resultsSection) resultsSection.style.display = "none";
 
         resetUpload();
 
@@ -615,83 +512,31 @@ if (newAnalysisBtn) {
         if (chatMessages) {
             chatMessages.innerHTML = "";
 
-            const message = document.createElement("div");
-            message.className =
-                "chat-message assistant-message";
-            message.textContent =
-                "Upload and analyze a wafer, then ask about its prediction, confidence, or defect pattern.";
+            const welcome = document.createElement("div");
+            welcome.className = "chat-message assistant-message";
+            welcome.textContent =
+                "Upload and analyze a wafer, then ask me about the prediction.";
 
-            chatMessages.appendChild(message);
+            chatMessages.appendChild(welcome);
         }
 
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
 }
 
-// ============================================================
-// CHAT UI
-// ============================================================
-
-function addChatMessage(message, role) {
-    if (!chatMessages) return;
-
-    const element = document.createElement("div");
-    element.className = `chat-message ${role}-message`;
-    element.textContent = message;
-
-    chatMessages.appendChild(element);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-if (chatForm) {
-    chatForm.addEventListener("submit", event => {
-        event.preventDefault();
-
-        const message = chatInput?.value.trim();
-
-        if (!message || !currentAnalysis) return;
-
-        addChatMessage(message, "user");
-
-        if (chatInput) chatInput.value = "";
-
-        addChatMessage(
-            "The current Hugging Face classification integration does not expose a chat endpoint. A backend /chat function must be configured to enable AI replies.",
-            "assistant"
-        );
-
-        if (chatStatus) {
-            chatStatus.textContent =
-                "Chat backend is not configured.";
-        }
-    });
-}
-
-// ============================================================
+// ------------------------------------------------------------
 // INITIAL STATE
-// ============================================================
+// ------------------------------------------------------------
 
-if (loadingSection) {
-    loadingSection.style.display = "none";
-}
-
-if (resultsSection) {
-    resultsSection.style.display = "none";
-}
-
-if (analyzeBtn) {
-    analyzeBtn.disabled = true;
-}
-
+if (loadingSection) loadingSection.style.display = "none";
+if (resultsSection) resultsSection.style.display = "none";
+if (analyzeBtn) analyzeBtn.disabled = true;
 if (chatInput) chatInput.disabled = true;
 if (chatSendBtn) chatSendBtn.disabled = true;
 
 if (chatStatus) {
     chatStatus.textContent =
-        "Analyze a wafer to enable the assistant.";
+        "Analyze a wafer to enable the Gemini assistant.";
 }
 
-console.log("WAFER-GPT is ready.");
+console.log("WAFER-GPT frontend ready.");
