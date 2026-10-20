@@ -1,9 +1,12 @@
 fastapi
-python-multipart
 ai-edge-litert
-numpy
 opencv-python-headless
-pillow
-openai
 aiofiles
-uvicorn
+uvicorn[standard]
+python-multipart
+pillow
+numpy<2
+openai
+matplotlib
+ai-edge-litert
+tensorflow-cpu==2.15.1
