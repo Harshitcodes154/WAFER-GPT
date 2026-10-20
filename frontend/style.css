@@ -8,7 +8,7 @@
     --bg: #07090d;
     --panel: #0d1118;
     --panel2: #111720;
-    --border: rgba(255,255,255,0.08);
+    --border: rgba(255, 255, 255, 0.08);
     --text: #f4f7fb;
     --muted: #8993a4;
     --accent: #6ee7ff;
@@ -89,6 +89,8 @@ nav {
     border-radius: 9px;
     text-align: left;
     font-size: 14px;
+    display: flex;
+    align-items: center;
 }
 
 .nav-item span {
@@ -217,22 +219,22 @@ h1 {
 
 .upload-box {
     min-height: 330px;
-    border: 1px dashed rgba(110,231,255,0.25);
+    border: 1px dashed rgba(110, 231, 255, 0.25);
     border-radius: 18px;
     background:
         radial-gradient(
             circle at center,
-            rgba(124,92,255,0.08),
+            rgba(124, 92, 255, 0.08),
             transparent 55%
         ),
         var(--panel);
-
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     position: relative;
     transition: 0.25s;
+    cursor: pointer;
 }
 
 .upload-box:hover,
@@ -241,7 +243,7 @@ h1 {
     background:
         radial-gradient(
             circle at center,
-            rgba(110,231,255,0.08),
+            rgba(110, 231, 255, 0.08),
             transparent 55%
         ),
         var(--panel);
@@ -276,6 +278,9 @@ h1 {
 
 .upload-placeholder p span {
     color: var(--accent);
+    text-decoration: underline;
+    cursor: pointer;
+    pointer-events: auto;
 }
 
 .upload-placeholder small {
@@ -307,7 +312,7 @@ h1 {
     left: 15px;
     right: 15px;
     bottom: 15px;
-    background: rgba(7,9,13,0.9);
+    background: rgba(7, 9, 13, 0.9);
     border: 1px solid var(--border);
     backdrop-filter: blur(10px);
     border-radius: 10px;
@@ -328,11 +333,16 @@ h1 {
 }
 
 .preview-overlay button {
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     background: transparent;
     color: #ff7d8c;
     padding: 8px 12px;
     border-radius: 7px;
+    transition: 0.2s;
+}
+
+.preview-overlay button:hover {
+    background: rgba(255, 125, 140, 0.12);
 }
 
 
@@ -350,6 +360,7 @@ h1 {
     font-size: 14px;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 12px;
     transition: 0.2s;
 }
@@ -357,10 +368,12 @@ h1 {
 .analyze-btn:disabled {
     opacity: 0.35;
     cursor: not-allowed;
+    transform: none;
 }
 
 .analyze-btn:not(:disabled):hover {
     transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(110, 231, 255, 0.25);
 }
 
 
@@ -402,6 +415,7 @@ h1 {
 
 .results-section {
     margin-top: 50px;
+    transition: opacity 0.3s ease;
 }
 
 .result-grid {
@@ -464,7 +478,7 @@ h1 {
     height: 100%;
     width: 0;
     background: linear-gradient(90deg, #6ee7ff, #7c5cff);
-    transition: width 0.8s;
+    transition: width 0.8s ease-out;
 }
 
 .severity-card h2 {
@@ -509,6 +523,7 @@ h1 {
     height: 100%;
     object-fit: contain;
     padding: 20px;
+    transition: opacity 0.3s;
 }
 
 
@@ -549,6 +564,7 @@ h1 {
 .probability-fill {
     height: 100%;
     background: linear-gradient(90deg, #6ee7ff, #7c5cff);
+    transition: width 0.5s ease;
 }
 
 
@@ -587,7 +603,7 @@ h1 {
     font-size: 8px;
     padding: 6px 9px;
     border-radius: 20px;
-    background: rgba(110,231,255,0.08);
+    background: rgba(110, 231, 255, 0.08);
     color: var(--accent);
 }
 
@@ -643,6 +659,15 @@ h1 {
     gap: 10px;
 }
 
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
 .chat-message {
     max-width: 85%;
     padding: 11px 13px;
@@ -650,6 +675,7 @@ h1 {
     font-size: 13px;
     line-height: 1.55;
     white-space: pre-wrap;
+    word-break: break-word;
 }
 
 .assistant-message {
@@ -660,8 +686,8 @@ h1 {
 
 .user-message {
     align-self: flex-end;
-    background: rgba(110,231,255,0.12);
-    border: 1px solid rgba(110,231,255,0.25);
+    background: rgba(110, 231, 255, 0.12);
+    border: 1px solid rgba(110, 231, 255, 0.25);
     color: var(--text);
 }
 
@@ -681,6 +707,7 @@ h1 {
     padding: 12px 13px;
     font: inherit;
     outline: none;
+    transition: 0.2s;
 }
 
 .chat-form input:focus {
@@ -694,6 +721,11 @@ h1 {
     background: var(--accent);
     color: #05070a;
     font-weight: 800;
+    transition: 0.2s;
+}
+
+.chat-form button:not(:disabled):hover {
+    filter: brightness(1.1);
 }
 
 .chat-form button:disabled,
@@ -714,17 +746,18 @@ h1 {
     color: var(--muted);
     padding: 9px 13px;
     border-radius: 8px;
+    transition: 0.2s;
 }
 
 .new-analysis:hover {
     color: var(--text);
+    border-color: var(--accent);
 }
 
 
 /* RESPONSIVE */
 
 @media (max-width: 1000px) {
-
     .sidebar {
         width: 200px;
     }
@@ -736,11 +769,9 @@ h1 {
     .result-grid {
         grid-template-columns: 1fr;
     }
-
 }
 
 @media (max-width: 750px) {
-
     .sidebar {
         display: none;
     }
@@ -751,6 +782,7 @@ h1 {
 
     .topbar {
         flex-direction: column;
+        gap: 15px;
     }
 
     .visual-grid {
@@ -760,5 +792,4 @@ h1 {
     .upload-box {
         min-height: 280px;
     }
-
 }
