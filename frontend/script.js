@@ -3,7 +3,7 @@
 // ============================================================
 
 // Vercel deployment par frontend aur backend same domain par hain, isliye relative URL
-const API_BASE = "";
+const API_BASE = "https://wafer-gpt.vercel.app";
 
 let selectedFile = null;
 let currentAnalysis = null;
