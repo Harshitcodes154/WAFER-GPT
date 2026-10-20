@@ -1,6 +1,6 @@
 fastapi
 python-multipart
-tflite-runtime
+ai-edge-litert
 numpy
 opencv-python-headless
 pillow
