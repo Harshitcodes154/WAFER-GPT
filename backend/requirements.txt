@@ -4,5 +4,6 @@ ai-edge-litert
 numpy
 opencv-python-headless
 pillow
-google-genai
+openai
 aiofiles
+uvicorn
