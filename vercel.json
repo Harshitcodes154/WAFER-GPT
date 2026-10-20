@@ -1,36 +1,16 @@
 {
   "rewrites": [
     {
-      "source": "/predict",
-      "destination": "backend/main.py"
-    },
-    {
-      "source": "/chat",
-      "destination": "backend/main.py"
-    },
-    {
-      "source": "/health",
-      "destination": "backend/main.py"
-    },
-    {
-      "source": "/uploads/(.*)",
-      "destination": "backend/main.py"
-    },
-    {
-      "source": "/gradcam/(.*)",
-      "destination": "backend/main.py"
+      "source": "/(predict|chat|health|uploads/.*|gradcam/.*)",
+      "destination": "/api/index.py"
     },
     {
       "source": "/",
       "destination": "/frontend/index.html"
     },
     {
-      "source": "/style.css",
-      "destination": "/frontend/style.css"
-    },
-    {
-      "source": "/script.js",
-      "destination": "/frontend/script.js"
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
     }
   ]
 }
