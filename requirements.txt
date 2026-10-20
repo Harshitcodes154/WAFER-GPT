@@ -1,0 +1,8 @@
+fastapi
+python-multipart
+tflite-runtime
+numpy
+opencv-python-headless
+pillow
+google-genai
+aiofiles
