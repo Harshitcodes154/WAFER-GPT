@@ -1,33 +1,28 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "backend/main.py",
-      "use": "@vercel/python"
+      "source": "/predict",
+      "destination": "backend/main.py"
     },
     {
-      "src": "frontend/**",
-      "use": "@vercel/static"
+      "source": "/chat",
+      "destination": "backend/main.py"
+    },
+    {
+      "source": "/health",
+      "destination": "backend/main.py"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "backend/main.py"
+    },
+    {
+      "source": "/gradcam/:path*",
+      "destination": "backend/main.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
     }
-  ],
-  "routes": [
-    {
-      "src": "/uploads/(.*)",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/gradcam/(.*)",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/predict",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/chat",
-      "dest": "backend/main.py"
-    },
-    {
-      "src": "/health",
-      "dest": "backend/main.py"
-    },
+  ]
+}
