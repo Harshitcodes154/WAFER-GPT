@@ -39,7 +39,7 @@ app.add_middleware(
 # NVIDIA API CONFIGURATION
 # ============================================================
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY")
 
 NVIDIA_MODEL = os.getenv(
     "NVIDIA_MODEL",
@@ -48,12 +48,12 @@ NVIDIA_MODEL = os.getenv(
 
 nvidia_client = (
     OpenAI(
-        api_key=GEMINI_API_KEY,
+        api_key=NVIDIA_API_KEY,
         base_url="https://integrate.api.nvidia.com/v1",
         timeout=45.0,
         max_retries=1,
     )
-    if GEMINI_API_KEY
+    if NVIDIA_API_KEY
     else None
 )
 
@@ -66,8 +66,6 @@ BASE_DIR = Path(__file__).resolve().parent
 PROJECT_DIR = BASE_DIR.parent
 
 TFLITE_MODEL_PATH = BASE_DIR / "wafer_model_dynamic.tflite"
-FRONTEND_DIR = PROJECT_DIR / "frontend"
-FRONTEND_INDEX = FRONTEND_DIR / "index.html"
 
 TEMP_DIR = Path("/tmp")
 UPLOAD_DIR = TEMP_DIR / "uploads"
@@ -375,7 +373,7 @@ def analyze_wafer_with_nvidia(
     if nvidia_client is None:
         return (
             "NVIDIA analysis unavailable. "
-            "Configure NVIDIA_API_KEY in Vercel."
+            "Configure NVIDIA_API_KEY in Render Environment Variables."
         )
 
     prompt = f"""
@@ -463,15 +461,14 @@ ENGINEER SUMMARY
 
 @app.get("/")
 async def root():
-    # Serve the frontend homepage at the website root.
-    if FRONTEND_INDEX.is_file():
-        return FileResponse(FRONTEND_INDEX)
-
+    # Render hosts the API only; the frontend remains on Vercel.
     return {
-        "name": "WaferGPT",
+        "name": "WaferGPT API",
         "status": "online",
         "version": "3.3.0",
         "engine": "TFLite + NVIDIA NIM",
+        "docs": "/docs",
+        "health": "/health",
     }
 
 
@@ -599,7 +596,7 @@ async def predict(file: UploadFile = File(...)):
             status_code=500,
             detail=(
                 "Wafer prediction failed. "
-                "Check Vercel function logs."
+                "Check Render service logs."
             ),
         )
 
