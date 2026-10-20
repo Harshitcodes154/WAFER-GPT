@@ -37,6 +37,13 @@ RESULT_DIR.mkdir(parents=True, exist_ok=True)
 
 TFLITE_PATH = Path(os.getenv("TFLITE_MODEL_PATH", str(BASE_DIR / "wafer_model_dynamic.tflite")))
 KERAS_PATH = Path(os.getenv("KERAS_MODEL_PATH", str(BASE_DIR / "wafer_model.keras")))
+# If no explicit KERAS_MODEL_PATH is set, auto-detect common Keras/H5 filenames.
+if "KERAS_MODEL_PATH" not in os.environ and not KERAS_PATH.exists():
+    for candidate_name in ("model.keras", "wafer_model.h5", "model.h5", "best_model.keras", "best_model.h5"):
+        candidate = BASE_DIR / candidate_name
+        if candidate.exists():
+            KERAS_PATH = candidate
+            break
 IMAGE_SIZE = int(os.getenv("IMAGE_SIZE", "224"))
 MAX_UPLOAD_BYTES = int(os.getenv("MAX_UPLOAD_BYTES", str(4 * 1024 * 1024)))
 
@@ -285,6 +292,10 @@ def generate_gradcam(batch: np.ndarray, output_filename: str) -> Optional[str]:
 
         with tf.GradientTape() as tape:
             conv_outputs, predictions = grad_model(tensor, training=False)
+            if isinstance(predictions, (list, tuple)):
+                predictions = predictions[0]
+            elif isinstance(predictions, dict):
+                predictions = next(iter(predictions.values()))
             class_index = tf.argmax(predictions[0])
             class_score = predictions[:, class_index]
 
