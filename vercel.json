@@ -13,16 +13,24 @@
       "destination": "backend/main.py"
     },
     {
-      "source": "/uploads/:path*",
+      "source": "/uploads/(.*)",
       "destination": "backend/main.py"
     },
     {
-      "source": "/gradcam/:path*",
+      "source": "/gradcam/(.*)",
       "destination": "backend/main.py"
     },
     {
-      "source": "/(.*)",
-      "destination": "/frontend/$1"
+      "source": "/",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/style.css",
+      "destination": "/frontend/style.css"
+    },
+    {
+      "source": "/script.js",
+      "destination": "/frontend/script.js"
     }
   ]
 }
