@@ -1,12 +1,10 @@
+// ============================================================
+// CONFIGURATION & DOM ELEMENTS
+// ============================================================
 
-import { Client, handle_file } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+// Vercel deployment par frontend aur backend same domain par hain, isliye relative URL
+const API_BASE = "";
 
-// WAFER-GPT Hugging Face Space
-const SPACE_ID = "harshitcodes1544/WAFER-GPT";
-const PREDICT_ENDPOINT = "/predict_wafer";
-const CHAT_ENDPOINT = "/chat_response";
-
-let clientPromise = null;
 let selectedFile = null;
 let currentAnalysis = null;
 let isAnalyzing = false;
@@ -43,26 +41,9 @@ const chatSendBtn = $("chatSendBtn");
 const chatMessages = $("chatMessages");
 const chatStatus = $("chatStatus");
 
-// ------------------------------------------------------------
-// CONNECT TO HUGGING FACE
-// ------------------------------------------------------------
-
-async function getClient() {
-    if (!clientPromise) {
-        clientPromise = Client.connect(SPACE_ID);
-    }
-
-    try {
-        return await clientPromise;
-    } catch (error) {
-        clientPromise = null;
-        throw error;
-    }
-}
-
-// ------------------------------------------------------------
+// ============================================================
 // FILE UPLOAD AND PREVIEW
-// ------------------------------------------------------------
+// ============================================================
 
 function formatFileSize(bytes) {
     if (bytes < 1024) return `${bytes} B`;
@@ -150,9 +131,9 @@ if (uploadBox && fileInput) {
     });
 }
 
-// ------------------------------------------------------------
+// ============================================================
 // RESET
-// ------------------------------------------------------------
+// ============================================================
 
 function resetUpload() {
     selectedFile = null;
@@ -184,9 +165,9 @@ if (removeBtn) {
     });
 }
 
-// ------------------------------------------------------------
-// ANALYZE IMAGE
-// ------------------------------------------------------------
+// ============================================================
+// ANALYZE IMAGE (DIRECT FASTAPI /predict CALL)
+// ============================================================
 
 if (analyzeBtn) {
     analyzeBtn.addEventListener("click", async (event) => {
@@ -215,64 +196,42 @@ async function analyzeWafer() {
     }
 
     try {
-        const client = await getClient();
+        const formData = new FormData();
+        formData.append("file", selectedFile);
 
-        const result = await client.predict(PREDICT_ENDPOINT, [
-            await handle_file(selectedFile)
-        ]);
+        const response = await fetch(`${API_BASE}/predict`, {
+            method: "POST",
+            body: formData,
+        });
 
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.detail || `Server responded with ${response.status}`);
+        }
+
+        const result = await response.json();
         console.log("Prediction response:", result);
 
-        const scores = result?.data?.[0];
-        const heatmap = result?.data?.[1];
-
-        if (!scores || typeof scores !== "object" || Array.isArray(scores)) {
-            throw new Error(
-                "Unexpected prediction response. Check the Space's Use via API page."
-            );
+        if (!result.success) {
+            throw new Error(result.detail || "Prediction request was unsuccessful.");
         }
-
-        const entries = Object.entries(scores)
-            .filter(([, value]) => Number.isFinite(Number(value)))
-            .sort((a, b) => Number(b[1]) - Number(a[1]));
-
-        if (!entries.length) {
-            throw new Error("No class probabilities were returned by the model.");
-        }
-
-        const [bestLabel, bestScore] = entries[0];
-        const scoreTotal = entries.reduce(
-            (sum, [, value]) => sum + Number(value),
-            0
-        );
-
-        const normalizedScores = {};
-        for (const [label, value] of entries) {
-            normalizedScores[label] = scoreTotal > 0
-                ? Number(value) / scoreTotal
-                : 0;
-        }
-
-        const confidencePercent = normalizedScores[bestLabel] * 100;
 
         currentAnalysis = {
-            prediction: bestLabel,
-            confidence: confidencePercent,
-            probabilities: normalizedScores,
-            llm_analysis: ""
+            prediction: result.prediction,
+            confidence: result.confidence,
+            probabilities: result.probabilities,
+            llm_analysis: result.llm_analysis || "",
         };
 
-        displayResults(currentAnalysis, heatmap);
+        displayResults(currentAnalysis, result.gradcam_url);
 
     } catch (error) {
         console.error("Analysis failed:", error);
-
         alert(
             "Analysis failed.\n\n" +
             (error?.message || String(error)) +
-            "\n\nCheck that the Space is running and the API endpoint is correct."
+            "\n\nCheck browser console and Vercel function runtime logs."
         );
-
     } finally {
         isAnalyzing = false;
 
@@ -280,17 +239,16 @@ async function analyzeWafer() {
 
         if (analyzeBtn) {
             analyzeBtn.disabled = !selectedFile;
-            analyzeBtn.innerHTML =
-                "<span>Analyze Wafer</span><span>→</span>";
+            analyzeBtn.innerHTML = "<span>Analyze Wafer</span><span>→</span>";
         }
     }
 }
 
-// ------------------------------------------------------------
-// SHOW RESULTS AND GRAD-CAM
-// ------------------------------------------------------------
+// ============================================================
+// SHOW RESULTS AND HEATMAP
+// ============================================================
 
-function displayResults(data, heatmap) {
+function displayResults(data, heatmapUrl) {
     if (prediction) prediction.textContent = data.prediction;
 
     const conf = Math.max(0, Math.min(100, data.confidence || 0));
@@ -311,17 +269,14 @@ function displayResults(data, heatmap) {
     }
 
     if (gradcamImage) {
-        const heatmapUrl =
-            typeof heatmap === "string"
-                ? heatmap
-                : heatmap?.url || heatmap?.path || null;
-
         if (heatmapUrl) {
-            gradcamImage.src = heatmapUrl;
+            // Cache bust parameter ensures the newest generated heatmap loads
+            gradcamImage.src = `${API_BASE}${heatmapUrl}?t=${Date.now()}`;
             gradcamImage.style.display = "block";
         } else {
             gradcamImage.removeAttribute("src");
-            console.warn("No Grad-CAM image returned by the Space.");
+            gradcamImage.style.display = "none";
+            console.warn("No Heatmap URL returned by the backend.");
         }
     }
 
@@ -329,6 +284,7 @@ function displayResults(data, heatmap) {
 
     if (llmAnalysis) {
         llmAnalysis.textContent =
+            data.llm_analysis ||
             "Ask the Gemini assistant below for an explanation of this prediction.";
     }
 
@@ -347,15 +303,15 @@ function displayResults(data, heatmap) {
         setTimeout(() => {
             resultsSection.scrollIntoView({
                 behavior: "smooth",
-                block: "start"
+                block: "start",
             });
         }, 200);
     }
 }
 
-// ------------------------------------------------------------
+// ============================================================
 // CLASS PROBABILITIES
-// ------------------------------------------------------------
+// ============================================================
 
 function renderProbabilities(data) {
     if (!probabilities) return;
@@ -399,9 +355,9 @@ function renderProbabilities(data) {
     }
 }
 
-// ------------------------------------------------------------
-// GEMINI CHAT
-// ------------------------------------------------------------
+// ============================================================
+// GEMINI CHAT (DIRECT FASTAPI /chat CALL)
+// ============================================================
 
 function addChatMessage(message, role) {
     if (!chatMessages) return;
@@ -438,17 +394,29 @@ if (chatForm) {
         if (chatStatus) chatStatus.textContent = "Gemini is thinking...";
 
         try {
-            const client = await getClient();
+            const payload = {
+                message: message,
+                prediction: currentAnalysis.prediction,
+                confidence: currentAnalysis.confidence,
+                probabilities: currentAnalysis.probabilities,
+                llm_analysis: currentAnalysis.llm_analysis || "",
+            };
 
-            const result = await client.predict(CHAT_ENDPOINT, [
-                message,
-                currentAnalysis.prediction,
-                `${currentAnalysis.confidence.toFixed(2)}%`,
-                JSON.stringify(currentAnalysis.probabilities),
-                currentAnalysis.llm_analysis || ""
-            ]);
+            const response = await fetch(`${API_BASE}/chat`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
 
-            const answer = result?.data?.[0];
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.detail || `Server responded with ${response.status}`);
+            }
+
+            const data = await response.json();
+            const answer = data?.response;
 
             if (typeof answer !== "string" || !answer.trim()) {
                 throw new Error("Gemini returned an empty response.");
@@ -470,8 +438,7 @@ if (chatForm) {
             );
 
             if (chatStatus) {
-                chatStatus.textContent =
-                    "Chat failed. Check the Space logs and GEMINI_API_KEY secret.";
+                chatStatus.textContent = "Chat failed. Verify GEMINI_API_KEY in Vercel settings.";
             }
 
         } finally {
@@ -485,9 +452,9 @@ if (chatForm) {
     });
 }
 
-// ------------------------------------------------------------
+// ============================================================
 // NEW ANALYSIS
-// ------------------------------------------------------------
+// ============================================================
 
 if (newAnalysisBtn) {
     newAnalysisBtn.addEventListener("click", (event) => {
@@ -505,8 +472,7 @@ if (newAnalysisBtn) {
         if (chatSendBtn) chatSendBtn.disabled = true;
 
         if (chatStatus) {
-            chatStatus.textContent =
-                "Analyze a wafer to enable the assistant.";
+            chatStatus.textContent = "Analyze a wafer to enable the assistant.";
         }
 
         if (chatMessages) {
@@ -524,9 +490,9 @@ if (newAnalysisBtn) {
     });
 }
 
-// ------------------------------------------------------------
+// ============================================================
 // INITIAL STATE
-// ------------------------------------------------------------
+// ============================================================
 
 if (loadingSection) loadingSection.style.display = "none";
 if (resultsSection) resultsSection.style.display = "none";
@@ -535,8 +501,7 @@ if (chatInput) chatInput.disabled = true;
 if (chatSendBtn) chatSendBtn.disabled = true;
 
 if (chatStatus) {
-    chatStatus.textContent =
-        "Analyze a wafer to enable the Gemini assistant.";
+    chatStatus.textContent = "Analyze a wafer to enable the Gemini assistant.";
 }
 
 console.log("WAFER-GPT frontend ready.");
