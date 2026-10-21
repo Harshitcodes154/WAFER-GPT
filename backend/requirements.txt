@@ -2,7 +2,7 @@ fastapi
 uvicorn[standard]
 python-multipart
 ai-edge-litert
-tensorflow-cpu==2.15.1
+tensorflow-cpu==2.21.1
 keras==3.13.2
 numpy==1.26.4
 opencv-python-headless==4.10.0.84
