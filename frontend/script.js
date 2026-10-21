@@ -2,8 +2,9 @@
 // CONFIGURATION & DOM ELEMENTS
 // ============================================================
 
-// Vercel deployment par frontend aur backend same domain par hain, isliye relative URL
-const API_BASE = "https://wafer-gpt.onrender.com/";
+// Frontend is hosted on Vercel; FastAPI backend is hosted on Render.
+// Do not add a trailing slash: requests below append /predict and /chat.
+const API_BASE = "https://wafer-gpt.onrender.com";
 
 let selectedFile = null;
 let currentAnalysis = null;
@@ -61,8 +62,8 @@ function showPreview(file) {
         return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-        alert("Maximum image size is 10 MB.");
+    if (file.size > 4 * 1024 * 1024) {
+        alert("Maximum image size is 4 MB.");
         return;
     }
 
@@ -199,7 +200,7 @@ async function analyzeWafer() {
         const formData = new FormData();
         formData.append("file", selectedFile);
 
-        const response = await fetch(`${API_BASE}/predict`, {
+        const response = await fetch(new URL("/predict", API_BASE), {
             method: "POST",
             body: formData,
         });
@@ -230,7 +231,7 @@ async function analyzeWafer() {
         alert(
             "Analysis failed.\n\n" +
             (error?.message || String(error)) +
-            "\n\nCheck browser console and Vercel function runtime logs."
+            "\n\nCheck browser Console and the Render backend logs."
         );
     } finally {
         isAnalyzing = false;
@@ -271,7 +272,9 @@ function displayResults(data, heatmapUrl) {
     if (gradcamImage) {
         if (heatmapUrl) {
             // Cache bust parameter ensures the newest generated heatmap loads
-            gradcamImage.src = `${API_BASE}${heatmapUrl}?t=${Date.now()}`;
+            const heatmapURL = new URL(heatmapUrl, API_BASE);
+            heatmapURL.searchParams.set("t", Date.now().toString());
+            gradcamImage.src = heatmapURL.toString();
             gradcamImage.style.display = "block";
         } else {
             gradcamImage.removeAttribute("src");
@@ -285,14 +288,14 @@ function displayResults(data, heatmapUrl) {
     if (llmAnalysis) {
         llmAnalysis.textContent =
             data.llm_analysis ||
-            "Ask the Gemini assistant below for an explanation of this prediction.";
+            "AI-generated analysis is currently unavailable. You can still ask a question below.";
     }
 
     if (chatInput) chatInput.disabled = false;
     if (chatSendBtn) chatSendBtn.disabled = false;
 
     if (chatStatus) {
-        chatStatus.textContent = "Gemini assistant is ready.";
+        chatStatus.textContent = "AI assistant is ready.";
     }
 
     if (resultsSection) {
@@ -379,7 +382,7 @@ if (chatForm) {
         if (!message) return;
 
         if (!currentAnalysis) {
-            alert("Please analyze a wafer before asking Gemini.");
+            alert("Please analyze a wafer before asking a question.");
             return;
         }
 
@@ -391,7 +394,7 @@ if (chatForm) {
         }
 
         if (chatSendBtn) chatSendBtn.disabled = true;
-        if (chatStatus) chatStatus.textContent = "Gemini is thinking...";
+        if (chatStatus) chatStatus.textContent = "AI assistant is thinking...";
 
         try {
             const payload = {
@@ -402,7 +405,7 @@ if (chatForm) {
                 llm_analysis: currentAnalysis.llm_analysis || "",
             };
 
-            const response = await fetch(`${API_BASE}/chat`, {
+            const response = await fetch(new URL("/chat", API_BASE), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -419,26 +422,26 @@ if (chatForm) {
             const answer = data?.response;
 
             if (typeof answer !== "string" || !answer.trim()) {
-                throw new Error("Gemini returned an empty response.");
+                throw new Error("The AI backend returned an empty response.");
             }
 
             addChatMessage(answer, "assistant");
 
             if (chatStatus) {
-                chatStatus.textContent = "Gemini assistant is ready.";
+                chatStatus.textContent = "AI assistant is ready.";
             }
 
         } catch (error) {
-            console.error("Gemini chat failed:", error);
+            console.error("AI chat failed:", error);
 
             addChatMessage(
-                "Gemini could not respond: " +
+                "AI assistant could not respond: " +
                 (error?.message || String(error)),
                 "assistant"
             );
 
             if (chatStatus) {
-                chatStatus.textContent = "Chat failed. Verify GEMINI_API_KEY in Vercel settings.";
+                chatStatus.textContent = "Chat failed. Check the API key and logs in the Render backend settings.";
             }
 
         } finally {
@@ -501,7 +504,7 @@ if (chatInput) chatInput.disabled = true;
 if (chatSendBtn) chatSendBtn.disabled = true;
 
 if (chatStatus) {
-    chatStatus.textContent = "Analyze a wafer to enable the Gemini assistant.";
+    chatStatus.textContent = "Analyze a wafer to enable the AI assistant.";
 }
 
 console.log("WAFER-GPT frontend ready.");
