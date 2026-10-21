@@ -70,6 +70,7 @@ interpreter = None
 input_details = None
 output_details = None
 keras_model = None
+keras_api = None
 keras_load_error = None
 tflite_load_error = None
 
@@ -143,21 +144,54 @@ def load_tflite():
 
 
 def load_keras_for_gradcam():
-    global keras_model, keras_load_error
+    """Load the original Keras model for Grad-CAM without affecting TFLite inference.
+
+    Try standalone Keras first (needed by many Keras 3 .keras files), then
+    tf.keras as a fallback. The saved model and installed package versions still
+    need to be compatible; this function reports both failures in /health/logs.
+    """
+    global keras_model, keras_api, keras_load_error
+
     if not KERAS_PATH.exists():
         keras_load_error = (
-            "Original Keras model is not present. True Grad-CAM needs the original "
-            "Keras model (or a TFLite model exported with intermediate activations)."
+            f"Original Keras model not found at {KERAS_PATH}. True Grad-CAM needs "
+            "the original .keras/.h5 model; TFLite prediction can still work."
         )
         log.warning(keras_load_error)
         return
+
+    errors = []
+
+    # Keras 3 is often the correct loader for .keras archives. Keep this
+    # separate from TFLite so a Grad-CAM load failure does not disable prediction.
+    try:
+        import keras as standalone_keras
+        keras_model = standalone_keras.models.load_model(str(KERAS_PATH), compile=False)
+        keras_api = standalone_keras
+        keras_load_error = None
+        log.info("Keras model loaded with standalone keras %s: %s",
+                 getattr(standalone_keras, "__version__", "unknown"), KERAS_PATH.name)
+        return
+    except Exception as exc:
+        errors.append(f"standalone keras: {type(exc).__name__}: {exc}")
+        log.warning("Standalone Keras could not load model: %s", exc)
+
     try:
         import tensorflow as tf
         keras_model = tf.keras.models.load_model(str(KERAS_PATH), compile=False)
-        log.info("Keras model loaded for Grad-CAM: %s", KERAS_PATH.name)
+        keras_api = tf.keras
+        keras_load_error = None
+        log.info("Keras model loaded with tf.keras / TensorFlow %s: %s",
+                 getattr(tf, "__version__", "unknown"), KERAS_PATH.name)
+        return
     except Exception as exc:
-        keras_load_error = str(exc)
-        log.exception("Could not load Keras model for Grad-CAM")
+        errors.append(f"tf.keras: {type(exc).__name__}: {exc}")
+        log.exception("tf.keras could not load the Keras model")
+
+    keras_model = None
+    keras_api = None
+    keras_load_error = " | ".join(errors)
+    log.error("Could not load Keras model for Grad-CAM: %s", keras_load_error)
 
 
 load_tflite()
@@ -275,16 +309,17 @@ def generate_gradcam(batch: np.ndarray, output_filename: str) -> Optional[str]:
     try:
         import tensorflow as tf
 
+        model_keras = keras_api or tf.keras
         conv_layers = [
             layer for layer in keras_model.layers
-            if isinstance(layer, tf.keras.layers.Conv2D)
+            if isinstance(layer, model_keras.layers.Conv2D)
         ]
         if not conv_layers:
             log.warning("Grad-CAM skipped: no Conv2D layer found in Keras model.")
             return None
 
         last_conv = conv_layers[-1]
-        grad_model = tf.keras.Model(
+        grad_model = model_keras.Model(
             inputs=keras_model.inputs,
             outputs=[last_conv.output, keras_model.output]
         )
@@ -309,7 +344,7 @@ def generate_gradcam(batch: np.ndarray, output_filename: str) -> Optional[str]:
         heatmap = tf.reduce_sum(conv_outputs * weights, axis=-1)
         heatmap = tf.maximum(heatmap, 0)
         max_value = tf.reduce_max(heatmap)
-        heatmap = heatmap / (max_value + tf.keras.backend.epsilon())
+        heatmap = heatmap / (max_value + model_keras.backend.epsilon())
         heatmap = heatmap.numpy()
 
         heat_img = Image.fromarray(np.uint8(np.clip(heatmap * 255, 0, 255)))
@@ -421,6 +456,8 @@ def health():
         "tflite_model_loaded": interpreter is not None,
         "tflite_model_path": str(TFLITE_PATH),
         "keras_model_loaded_for_gradcam": keras_model is not None,
+        "keras_model_path": str(KERAS_PATH),
+        "keras_loader": getattr(keras_api, "__name__", None) if keras_api is not None else None,
         "gradcam_note": keras_load_error if keras_model is None else "Ready",
         "tflite_error": tflite_load_error,
     }
