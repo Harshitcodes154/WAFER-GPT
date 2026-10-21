@@ -1,12 +1,13 @@
 fastapi
 ai-edge-litert
-opencv-python-headless
 aiofiles
 uvicorn[standard]
 python-multipart
 pillow
-numpy<2
 openai
 matplotlib
 ai-edge-litert
 tensorflow-cpu==2.15.1
+keras==3.13.2
+numpy==1.26.4
+opencv-python-headless==4.10.0.84
